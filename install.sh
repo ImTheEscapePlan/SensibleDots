@@ -35,15 +35,17 @@ flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flat
 echo "--- 4. Enabling sddm service ---"
 sudo systemctl enable sddm.service
 
-# 5. Clone and run SilentSDDM
 echo "--- 5. Cloning and installing SilentSDDM ---"
 git clone "$SDDM_REPO"
 cd SilentSDDM
 ./install.sh
 cd ..
 
-# 6. Copy dotfiles to home directory, overwriting existing files
-echo "--- 6. Copying dotfiles from $DOTFILES_DIR to home directory ---"
+echo "--- 6. Installing Noctalia ---"
+yay -S noctalia-shell
+
+# 7. Copy dotfiles to home directory, overwriting existing files
+echo "--- 7. Copying dotfiles from $DOTFILES_DIR to home directory ---"
 # Copy .config folder and its contents
 if [ -d "$DOTFILES_DIR/.config" ]; then
     echo "Copying ~/.config/"
