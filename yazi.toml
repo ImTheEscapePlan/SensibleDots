@@ -1,0 +1,29 @@
+[mgr]
+sort_by = "natural"
+sort_sensitive = true
+sort_dir_first = true
+linemode = "size"
+show_hidden = true
+show_symlink = true
+sort_translit = true
+scrolloff = 1
+
+[opener]
+edit = [
+    { run = 'vim "$@"', block = true, desc = "Vim" }
+]
+play = [
+    { run = 'vlc "$@"', block = false, desc = "VLC", for = "unix" }
+]
+imv = [
+    { run = 'imv "$@"', desc = "imv", orphan = true }
+]
+
+[open]
+rules = [
+    { mime = "text/*", use = "edit" },
+    { mime = "image/*", use = "imv" }
+]
+append_rules = [
+    { mime = "{audio,video}/*", use = "play" }
+]
