@@ -8,59 +8,180 @@ DOTFILES_DIR="$HOME/SensibleDots"
 YAY_URL="https://aur.archlinux.org/yay.git"
 SDDM_REPO="https://github.com/uiriansan/SilentSDDM"
 
+# Function to get user confirmation
+prompt_for_user() {
+    local step_desc=$1
+    local choice
+    while true; do
+        echo ""
+        echo "--------------------------------------------------"
+        echo "STEP: $step_desc"
+        echo "--------------------------------------------------"
+        read -r -p "Enter choice (y=yes/continue, n=no/skip, q=quit): " choice
+        
+        # Convert to lowercase for case-insensitive comparison
+        choice=$(echo "$choice" | tr '[:upper:]' '[:lower:]')
+
+        case "$choice" in
+            y)
+                echo "--> Continuing with step."
+                echo ""
+                ;;
+            n)
+                echo "--> Skipping step."
+                echo ""
+                return 0 # Return success/skip
+                ;;
+            q)
+                echo "--> Quitting script."
+                echo ""
+                return 1 # Return quit signal
+                ;;
+            *)
+                echo "--> Invalid choice: '$choice'. Please enter 'y', 'n', or 'q'."
+                prompt_for_user "$step_desc" # Loop back
+                ;;
+        esac
+    done
+}
+
 echo "Starting dotfiles installation script..."
 
 # 1. Install packages from the defined list (pacman)
-echo "--- 1. Installing packages from the defined list ---"
-if [ -n "$PACKAGES" ]; then
-    echo "Installing packages: ${PACKAGES}"
-    # Install packages in one go
-    sudo pacman -S --noconfirm --needed ${PACKAGES}
-else
-    echo "--- Warning: PACKAGES variable is empty. Skipping package installation. ---"
-fi
+prompt_for_user "1. Installing packages from the defined list"
+choice=$(read -r -p "Enter choice (y/n/q): " | tr '[:upper:]' '[:lower:]')
+
+case "$choice" in
+    y)
+        echo "Installing packages: ${PACKAGES}"
+        # Install packages in one go
+        sudo pacman -S --noconfirm --needed ${PACKAGES}
+        ;;
+    n)
+        echo "Skipping package installation."
+        ;;
+    q)
+        exit 0
+        ;;
+esac
 
 # 2. Install yay
-echo "--- 2. Installing yay ---"
-git clone "$YAY_URL"
-cd yay
-makepkg -si
-cd ..
+prompt_for_user "2. Installing yay"
+choice=$(read -r -p "Enter choice (y/n/q): " | tr '[:upper:]' '[:lower:]')
+
+case "$choice" in
+    y)
+        echo "Cloning yay repository..."
+        git clone "$YAY_URL"
+        cd yay
+        makepkg -si
+        cd ..
+        ;;
+    n)
+        echo "Skipping yay installation."
+        ;;
+    q)
+        exit 0
+        ;;
+esac
 
 # 3. Add flathub repository
-echo "--- 3. Adding flathub repository ---"
-flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+prompt_for_user "3. Adding flathub repository"
+choice=$(read -r -p "Enter choice (y/n/q): " | tr '[:upper:]' '[:lower:]')
+
+case "$choice" in
+    y)
+        echo "Adding flathub repository."
+        flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+        ;;
+    n)
+        echo "Skipping flathub repository addition."
+        ;;
+    q)
+        exit 0
+        ;;
+esac
 
 # 4. Enable sddm service
-echo "--- 4. Enabling sddm service ---"
-sudo systemctl enable sddm.service
+prompt_for_user "4. Enabling sddm service"
+choice=$(read -r -p "Enter choice (y/n/q): " | tr '[:upper:]' '[:lower:]')
 
-echo "--- 5. Cloning and installing SilentSDDM ---"
-git clone "$SDDM_REPO"
-cd SilentSDDM
-./install.sh
-cd ..
+case "$choice" in
+    y)
+        echo "Enabling sddm service."
+        sudo systemctl enable sddm.service
+        ;;
+    n)
+        echo "Skipping sddm service enablement."
+        ;;
+    q)
+        exit 0
+        ;;
+esac
 
-echo "--- 6. Installing Noctalia ---"
-yay -S noctalia-shell
+# 5. Cloning and installing SilentSDDM
+prompt_for_user "5. Cloning and installing SilentSDDM"
+choice=$(read -r -p "Enter choice (y/n/q): " | tr '[:upper:]' '[:lower:]')
 
-# 7. Copy dotfiles to home directory, overwriting existing files
-echo "--- 7. Copying dotfiles from $DOTFILES_DIR to home directory ---"
-# Copy .config folder and its contents
-if [ -d "$DOTFILES_DIR/.config" ]; then
-    echo "Copying ~/.config/"
-    cp -r "$DOTFILES_DIR/.config" "$HOME"
-else
-    echo "Warning: ~/.config/ folder not found in $DOTFILES_DIR, skipping copy."
-fi
+case "$choice" in
+    y)
+        echo "Cloning SilentSDDM repository..."
+        git clone "$SDDM_REPO"
+        cd SilentSDDM
+        ./install.sh
+        cd ..
+        ;;
+    n)
+        echo "Skipping SilentSDDM installation."
+        ;;
+    q)
+        exit 0
+        ;;
+esac
 
-# Copy specific files
-echo "Copying .vimrc"
-cp "$DOTFILES_DIR/.vimrc" "$HOME"
+# 6. Installing Noctalia
+prompt_for_user "6. Installing Noctalia"
+choice=$(read -r -p "Enter choice (y/n/q): " | tr '[:upper:]' '[:lower:]')
 
-echo "Copying .bashrc"
-cp "$DOTFILES_DIR/.bashrc" "$HOME"
+case "$choice" in
+    y)
+        echo "Installing noctalia-shell."
+        yay -S noctalia-shell
+        ;;
+    n)
+        echo "Skipping Noctalia installation."
+        ;;
+    q)
+        exit 0
+        ;;
+esac
 
-echo "Dotfiles installation complete!"
+# 7. Copying dotfiles to home directory, overwriting existing files
+prompt_for_user "7. Copying dotfiles from $DOTFILES_DIR to home directory"
+choice=$(read -r -p "Enter choice (y/n/q): " | tr '[:upper:]' '[:lower:]')
+
+case "$choice" in
+    y)
+        echo "Copying ~/.config/"
+        if [ -d "$DOTFILES_DIR/.config" ]; then
+            cp -r "$DOTFILES_DIR/.config" "$HOME"
+        else
+            echo "Warning: ~/.config/ folder not found in $DOTFILES_DIR, skipping copy."
+        fi
+        
+        echo "Copying .vimrc"
+        cp "$DOTFILES_DIR/.vimrc" "$HOME"
+        
+        echo "Copying .bashrc"
+        cp "$DOTFILES_DIR/.bashrc" "$HOME"
+        ;;
+    n)
+        echo "Skipping dotfiles copy."
+        ;;
+    q)
+        exit 0
+        ;;
+esac
 
 echo "--------------------------------------------------"
+echo "Dotfiles installation finished."
