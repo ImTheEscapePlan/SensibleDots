@@ -15,7 +15,7 @@ echo "--- 1. Installing packages from the defined list ---"
 if [ -n "$PACKAGES" ]; then
     echo "Installing packages: ${PACKAGES}"
     # Install packages in one go
-    sudo pacman -S --noconfirm ${PACKAGES}
+    sudo pacman -S --noconfirm --needed ${PACKAGES}
 else
     echo "--- Warning: PACKAGES variable is empty. Skipping package installation. ---"
 fi
