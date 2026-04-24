@@ -214,11 +214,7 @@ case "$choice" in
     q)
         echo "Quitting script."
         exit 0
-        ;;
-    *)
-        echo "Invalid choice: '$choice'. Please enter 'y', 'n', or 'q'."
-        prompt_for_user "8. Creating standard user folders and the drives symlink" # Loop back
-        ;;
+        ;; 
 esac
 
 
@@ -248,10 +244,6 @@ case "$choice" in
     q)
         echo "Quitting script."
         exit 0
-        ;;
-    *)
-        echo "Invalid choice: '$choice'. Please enter 'y', 'n', or 'q'."
-        prompt_for_user "9. Setting xdg-mime defaults based on installed packages" # Loop back
         ;;
 esac
 echo "--------------------------------------------------"
