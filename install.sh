@@ -139,19 +139,16 @@ case "$choice" in
         ;;
 esac
 
-# 6. Installing Noctalia
+# 6. Installing AUR Packages
+prompt_for_user "6. Installing AUR packages"
+choice=$(read -r -p "Enter choice (y/n/q): " | tr '[:upper:]' '[:lower:]')
+
+case "$choice" in
     y)
         echo "Installing AUR Packages"
         echo "Installing packages via yay:"
         echo "yay -S noctalia-shell xdg-desktop-portal-termfilechooser-hunkyburrito-git"
         yay -S noctalia-shell xdg-desktop-portal-termfilechooser-hunkyburrito-git
-        ;;
-choice=$(read -r -p "Enter choice (y/n/q): " | tr '[:upper:]' '[:lower:]')
-
-case "$choice" in
-    y)
-        echo "Installing noctalia-shell."
-        yay -S noctalia-shell
         ;;
     n)
         echo "Skipping Noctalia installation."
@@ -176,7 +173,6 @@ case "$choice" in
         
         echo "Copying yazi.desktop to /usr/share/applications/ (will prompt for sudo password if necessary)"
         sudo cp "$DOTFILES_DIR/yazi.desktop" /usr/share/applications/
-        ;;
         echo "Copying .vimrc"
         cp "$DOTFILES_DIR/.vimrc" "$HOME"
         
@@ -193,12 +189,11 @@ esac
 
 # 8. Create standard user folders and a symlink
 prompt_for_user "8. Creating standard user folders and the drives symlink"
-
 choice=$(read -r -p "Enter choice (y/n/q): " | tr '[:upper:]' '[:lower:]')
 
 case "$choice" in
     y)
-        echo "Creating standard user folders and symlink..."
+        echo "Creating standard user folders and the drives symlink..."
         
         # Create directories
         mkdir -p ~/Downloads ~/Documents ~/Drives ~/Pictures ~/Videos
@@ -208,7 +203,7 @@ case "$choice" in
         # Create symlink
         LINK_TARGET="/run/media/ctrlescape/"
         SYMLINK_PATH="$HOME/Drives/ctrlescape"
-        
+       
         echo "Creating symlink: $SYMLINK_PATH -> $LINK_TARGET"
         ln -s "$LINK_TARGET" "$SYMLINK_PATH"
         echo "Successfully created symlink: $SYMLINK_PATH"
@@ -226,5 +221,38 @@ case "$choice" in
         ;;
 esac
 
+
+# 9. Setting xdg-mime defaults based on installed packages
+prompt_for_user "9. Setting xdg-mime defaults based on installed packages"
+choice=$(read -r -p "Enter choice (y/n/q): " | tr '[:upper:]' '[:lower:]')
+
+case "$choice" in
+    y)
+        echo "Setting xdg-mime defaults..."
+      
+
+        # Set specific defaults mentioned by the user
+        xdg-mime default yazi.desktop inode/directory
+        xdg-mime default vlc.desktop video/x-matroska
+        xdg-mime default imv.desktop image/jpeg
+        
+        # General principle: Set defaults for .desktop files if they exist
+        # This part could be extended based on other installed .desktop files, 
+        # but here we focus on the explicit request.
+        
+        echo "xdg-mime defaults set."
+        ;;
+    n)
+        echo "Skipping xdg-mime default setting."
+        ;;
+    q)
+        echo "Quitting script."
+        exit 0
+        ;;
+    *)
+        echo "Invalid choice: '$choice'. Please enter 'y', 'n', or 'q'."
+        prompt_for_user "9. Setting xdg-mime defaults based on installed packages" # Loop back
+        ;;
+esac
 echo "--------------------------------------------------"
 echo "Dotfiles installation finished."
