@@ -183,5 +183,40 @@ case "$choice" in
         ;;
 esac
 
+# 8. Create standard user folders and a symlink
+prompt_for_user "8. Creating standard user folders and the drives symlink"
+
+choice=$(read -r -p "Enter choice (y/n/q): " | tr '[:upper:]' '[:lower:]')
+
+case "$choice" in
+    y)
+        echo "Creating standard user folders and symlink..."
+        
+        # Create directories
+        mkdir -p ~/Downloads ~/Documents ~/Drives ~/Pictures ~/Videos
+        mkdir -p ~/Pictures/Wallpapers
+        echo "Created folders: ~/Downloads, ~/Documents, ~/Drives, ~/Pictures, ~/Videos, and ~/Pictures/Wallpapers"
+        
+        # Create symlink
+        LINK_TARGET="/run/media/ctrlescape/"
+        SYMLINK_PATH="$HOME/Drives/ctrlescape"
+        
+        echo "Creating symlink: $SYMLINK_PATH -> $LINK_TARGET"
+        ln -s "$LINK_TARGET" "$SYMLINK_PATH"
+        echo "Successfully created symlink: $SYMLINK_PATH"
+        ;;
+    n)
+        echo "Skipping standard folder creation and symlink."
+        ;;
+    q)
+        echo "Quitting script."
+        exit 0
+        ;;
+    *)
+        echo "Invalid choice: '$choice'. Please enter 'y', 'n', or 'q'."
+        prompt_for_user "8. Creating standard user folders and the drives symlink" # Loop back
+        ;;
+esac
+
 echo "--------------------------------------------------"
 echo "Dotfiles installation finished."
