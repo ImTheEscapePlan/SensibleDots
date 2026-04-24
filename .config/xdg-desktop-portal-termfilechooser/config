@@ -1,0 +1,16 @@
+[filechooser]
+cmd=yazi-wrapper.sh
+default_dir=$HOME
+env=TERMCMD='foot -T "terminal filechooser"'
+    VARIABLE2=VALUE2
+open_mode = suggested
+save_mode = last
+
+; Uncomment to skip creating destination save files with instructions in them
+; create_help_file=0
+; Uncomment and edit the line below to change the terminal emulator command
+; env=TERMCMD=foot
+
+; Mode must be one of 'suggested', 'default', or 'last'.
+open_mode=suggested
+save_mode=suggested

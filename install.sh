@@ -140,7 +140,12 @@ case "$choice" in
 esac
 
 # 6. Installing Noctalia
-prompt_for_user "6. Installing Noctalia"
+    y)
+        echo "Installing AUR Packages"
+        echo "Installing packages via yay:"
+        echo "yay -S noctalia-shell xdg-desktop-portal-termfilechooser-hunkyburrito-git"
+        yay -S noctalia-shell xdg-desktop-portal-termfilechooser-hunkyburrito-git
+        ;;
 choice=$(read -r -p "Enter choice (y/n/q): " | tr '[:upper:]' '[:lower:]')
 
 case "$choice" in
@@ -169,6 +174,9 @@ case "$choice" in
             echo "Warning: ~/.config/ folder not found in $DOTFILES_DIR, skipping copy."
         fi
         
+        echo "Copying yazi.desktop to /usr/share/applications/ (will prompt for sudo password if necessary)"
+        sudo cp "$DOTFILES_DIR/yazi.desktop" /usr/share/applications/
+        ;;
         echo "Copying .vimrc"
         cp "$DOTFILES_DIR/.vimrc" "$HOME"
         
