@@ -19,7 +19,6 @@ prompt_for_user() {
         echo "--------------------------------------------------"
         read -r -p "Enter choice (y=yes/continue, n=no/skip): " choice
         
-        # Convert to lowercase for case-insensitive comparison
         choice=$(echo "$choice" | tr '[:upper:]' '[:lower:]')
         
         case "$choice" in
@@ -43,210 +42,118 @@ prompt_for_user() {
 
 echo "Starting dotfiles installation script..."
 
-# 1. Install packages from the defined list (pacman)
-if prompt_for_user "1. Installing packages from the defined list"; then
-    choice=$?
-fi
+# Define the sequence of steps
+STEPS=(
+    "1. Installing packages from the defined list"
+    "2. Installing yay"
+    "3. Adding flathub repository"
+    "4. Enabling sddm service"
+    "5. Cloning and installing SilentSDDM"
+    "6. Installing AUR Packages (Noctalia)"
+    "7. Copying dotfiles from $DOTFILES_DIR to home directory"
+    "8. Creating standard user folders and the drives symlink"
+    "9. Setting xdg-mime defaults based on installed packages"
+)
 
-case "$choice" in
-    0) # 'y'
-        echo "Installing packages: ${PACKAGES}"
-        # Install packages in one go
-        sudo pacman -Sy --noconfirm --needed ${PACKAGES}
-        ;;
-    1) # 'n'
-        echo "Skipping package installation."
-        ;;
-    *) # Should only happen if prompt_for_user returns non-standard, but kept for safety
-        echo "Package step cancelled or invalid choice."
-        ;;
-esac
-
-# 2. Install yay
-if prompt_for_user "2. Installing yay"; then
-    choice=$?
-fi
-
-case "$choice" in
-    0) # 'y'
-        echo "Cloning yay repository..."
-        git clone "$YAY_URL"
-        cd yay
-        makepkg -si
-        cd ..
-        ;;
-    1) # 'n'
-        echo "Skipping yay installation."
-        ;;
-    *)
-        echo "Yay step cancelled or invalid choice."
-        ;;
-esac
-
-# 3. Add flathub repository
-if prompt_for_user "3. Adding flathub repository"; then
-    choice=$?
-fi
-
-case "$choice" in
-    0) # 'y'
-        echo "Adding flathub repository."
-        flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
-        ;;
-    1) # 'n'
-        echo "Skipping flathub repository addition."
-        ;;
-    *)
-        echo "Flathub step cancelled or invalid choice."
-        ;;
-esac
-
-# 4. Enable sddm service
-if prompt_for_user "4. Enabling sddm service"; then
-    choice=$?
-fi
-
-case "$choice" in
-    0) # 'y'
-        echo "Enabling sddm service."
-        sudo systemctl enable sddm.service
-        ;;
-    1) # 'n'
-        echo "Skipping sddm service enablement."
-        ;;
-    *)
-        echo "SDDM step cancelled or invalid choice."
-        ;;
-esac
-
-# 5. Cloning and installing SilentSDDM
-if prompt_for_user "5. Cloning and installing SilentSDDM"; then
-    choice=$?
-fi
-
-case "$choice" in
-    0) # 'y'
-        echo "Cloning SilentSDDM repository..."
-        git clone "$SDDM_REPO"
-        cd SilentSDDM
-        ./install.sh
-        cd ..
-        ;;
-    1) # 'n'
-        echo "Skipping SilentSDDM installation."
-        ;;
-    *)
-        echo "SilentSDDM step cancelled or invalid choice."
-        ;;
-esac
-
-# 6. Installing AUR Packages
-if prompt_for_user "6. Installing AUR packages"; then
-    choice=$?
-fi
-
-case "$choice" in
-    0) # 'y'
-        echo "Installing AUR Packages"
-        echo "Installing packages via yay:"
-        echo "yay -S noctalia-shell xdg-desktop-portal-termfilechooser-hunkyburrito-git"
-        yay -S noctalia-shell xdg-desktop-portal-termfilechooser-hunkyburrito-git
-        ;;
-    1) # 'n'
-        echo "Skipping Noctalia installation."
-        ;;
-    *)
-        echo "AUR Packages step cancelled or invalid choice."
-        ;;
-esac
-
-# 7. Copying dotfiles to home directory, overwriting existing files
-if prompt_for_user "7. Copying dotfiles from $DOTFILES_DIR to home directory"; then
-    choice=$?
-fi
-
-case "$choice" in
-    0) # 'y'
-        echo "Copying ~/.config/"
-        if [ -d "$DOTFILES_DIR/.config" ]; then
-            cp -r "$DOTFILES_DIR/.config" "$HOME"
-        else
-            echo "Warning: ~/.config/ folder not found in $DOTFILES_DIR, skipping copy."
-        fi
+# Loop through all steps
+for step in "${STEPS[@]}"; do
+    echo ""
+    echo "=================================================="
+    echo "Processing Step: $step"
+    echo "=================================================="
+    
+    if prompt_for_user "$step" == 0; then
+        choice=$?
         
-        echo "Copying yazi.desktop to /usr/share/applications/ (will prompt for sudo password if necessary)"
-        sudo cp "$DOTFILES_DIR/yazi.desktop" /usr/share/applications/
-        echo "Copying .vimrc"
-        cp "$DOTFILES_DIR/.vimrc" "$HOME"
-        
-        echo "Copying .bashrc"
-        cp "$DOTFILES_DIR/.bashrc" "$HOME"
-        ;;
-    1) # 'n'
-        echo "Skipping dotfiles copy."
-        ;;
-    *)
-        echo "Dotfiles copy step cancelled or invalid choice."
-        ;;
-esac
-
-# 8. Create standard user folders and a symlink
-if prompt_for_user "8. Creating standard user folders and the drives symlink"; then
-    choice=$?
-fi
-
-case "$choice" in
-    0) # 'y'
-        echo "Creating standard user folders and the drives symlink..."
-        
-        # Create directories
-        mkdir -p ~/Downloads ~/Documents ~/Drives ~/Pictures ~/Videos
-        mkdir -p ~/Pictures/Wallpapers
-        echo "Created folders: ~/Downloads, ~/Documents, ~/Drives, ~/Pictures, ~/Videos, and ~/Pictures/Wallpapers"
-        
-        # Create symlink
-        LINK_TARGET="/run/media/$USER/"
-        SYMLINK_PATH="$HOME/Drives/"
-        
-        echo "Creating symlink: $SYMLINK_PATH -> $LINK_TARGET"
-        ln -s "$LINK_TARGET" "$SYMLINK_PATH"
-        echo "Successfully created symlink: $SYMLINK_PATH"
-        ;;
-    1) # 'n'
-        echo "Skipping standard folder creation and symlink."
-        ;;
-    *)
-        echo "Folder/Symlink step cancelled or invalid choice."
-        ;;
-esac
-
-# 9. Setting xdg-mime defaults based on installed packages
-if prompt_for_user "9. Setting xdg-mime defaults based on installed packages"; then
-    choice=$?
-fi
-
-case "$choice" in
-    0) # 'y'
-        echo "Setting xdg-mime defaults..."
-        
-        # Set specific defaults mentioned by the user
-        xdg-mime default yazi.desktop inode/directory
-        xdg-mime default vlc.desktop video/x-matroska
-        xdg-mime default imv.desktop image/jpeg
-        
-        # General principle: Set defaults for .desktop files if they exist
-        # This part could be extended based on other installed .desktop files, 
-        # but here we focus on the explicit request.
-        
-        echo "xdg-mime defaults set."
-        ;;
-    1) # 'n'
-        echo "Skipping xdg-mime default setting."
-        ;;
-    *)
-        echo "MIME defaults step cancelled or invalid choice."
-        ;;
-esac
-
+        case "$choice" in
+            0) # 'y'
+                echo "--> Executing step: $step"
+                # Execute the command specific to this step
+                case "$step" in
+                    "1. Installing packages from the defined list")
+                        echo "Installing packages: ${PACKAGES}"
+                        sudo pacman -Sy --noconfirm --needed ${PACKAGES}
+                        ;;
+                    "2. Installing yay")
+                        echo "Cloning yay repository..."
+                        git clone "$YAY_URL"
+                        cd yay
+                        makepkg -si
+                        cd ..
+                        ;;
+                    "3. Adding flathub repository")
+                        echo "Adding flathub repository."
+                        flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+                        ;;
+                    "4. Enabling sddm service")
+                        echo "Enabling sddm service."
+                        sudo systemctl enable sddm.service
+                        ;;
+                    "5. Cloning and installing SilentSDDM")
+                        echo "Cloning SilentSDDM repository..."
+                        git clone "$SDDM_REPO"
+                        cd SilentSDDM
+                        ./install.sh
+                        cd ..
+                        ;;
+                    "6. Installing AUR Packages (Noctalia)")
+                        echo "Installing AUR Packages"
+                        echo "Installing packages via yay:"
+                        echo "yay -S noctalia-shell xdg-desktop-portal-termfilechooser-hunkyburrito-git"
+                        yay -S noctalia-shell xdg-desktop-portal-termfilechooser-hunkyburrito-git
+                        ;;
+                    "7. Copying dotfiles from $DOTFILES_DIR to home directory")
+                        echo "Copying ~/.config/"
+                        if [ -d "$DOTFILES_DIR/.config" ]; then
+                            cp -r "$DOTFILES_DIR/.config" "$HOME"
+                        else
+                            echo "Warning: ~/.config/ folder not found in $DOTFILES_DIR, skipping copy."
+                        fi
+                        
+                        echo "Copying yazi.desktop to /usr/share/applications/ (will prompt for sudo password if necessary)"
+                        sudo cp "$DOTFILES_DIR/yazi.desktop" /usr/share/applications/
+                        echo "Copying .vimrc"
+                        cp "$DOTFILES_DIR/.vimrc" "$HOME"
+                        
+                        echo "Copying .bashrc"
+                        cp "$DOTFILES_DIR/.bashrc" "$HOME"
+                        ;;
+                    "8. Creating standard user folders and the drives symlink")
+                        echo "Creating standard user folders and the drives symlink..."
+                        mkdir -p ~/Downloads ~/Documents ~/Drives ~/Pictures ~/Videos
+                        mkdir -p ~/Pictures/Wallpapers
+                        
+                        LINK_TARGET="/run/media/$USER/"
+                        SYMLINK_PATH="$HOME/Drives/"
+                        
+                        echo "Creating symlink: $SYMLINK_PATH -> $LINK_TARGET"
+                        ln -s "$LINK_TARGET" "$SYMLINK_PATH"
+                        echo "Successfully created symlink: $SYMLINK_PATH"
+                        ;;
+                    "9. Setting xdg-mime defaults based on installed packages")
+                        echo "Setting xdg-mime defaults..."
+                        xdg-mime default yazi.desktop inode/directory
+                        xdg-mime default vlc.desktop video/x-matroska
+                        xdg-mime default imv.desktop image/jpeg
+                        echo "xdg-mime defaults set."
+                        ;;
+                    *)
+                        echo "Unknown step in case statement for step: $step"
+                        ;;
+                esac
+                ;;
+            1) # 'n'
+                echo "--> Skipping step: $step"
+                ;;
+            *)
+                echo "--> Invalid choice received for step: $step. Skipping."
+                ;;
+        esac
+    else
+        # This branch handles unexpected failure in prompt_for_user itself
+        echo "--> Step prompt failed unexpectedly for: $step. Stopping further steps."
+        break
+    fi
+done
 echo "--------------------------------------------------"
 echo "Dotfiles installation finished."
