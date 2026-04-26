@@ -17,28 +17,24 @@ prompt_for_user() {
         echo "--------------------------------------------------"
         echo "STEP: $step_desc"
         echo "--------------------------------------------------"
-        read -r -p "Enter choice (y=yes/continue, n=no/skip, q=quit): " choice
+        read -r -p "Enter choice (y=yes/continue, n=no/skip): " choice
         
         # Convert to lowercase for case-insensitive comparison
         choice=$(echo "$choice" | tr '[:upper:]' '[:lower:]')
-
+        
         case "$choice" in
             y)
                 echo "--> Continuing with step."
                 echo ""
+                return 0 # Return success/continue
                 ;;
             n)
                 echo "--> Skipping step."
                 echo ""
-                return 0 # Return success/skip
-                ;;
-            q)
-                echo "--> Quitting script."
-                echo ""
-                return 1 # Return quit signal
+                return 1 # Return skip/exit signal
                 ;;
             *)
-                echo "--> Invalid choice: '$choice'. Please enter 'y', 'n', or 'q'."
+                echo "--> Invalid choice: '$choice'. Please enter 'y' or 'n'."
                 prompt_for_user "$step_desc" # Loop back
                 ;;
         esac
@@ -48,122 +44,129 @@ prompt_for_user() {
 echo "Starting dotfiles installation script..."
 
 # 1. Install packages from the defined list (pacman)
-prompt_for_user "1. Installing packages from the defined list"
-choice=$(read -r -p "Enter choice (y/n/q): " | tr '[:upper:]' '[:lower:]')
+if prompt_for_user "1. Installing packages from the defined list"; then
+    choice=$?
+fi
 
 case "$choice" in
-    y)
+    0) # 'y'
         echo "Installing packages: ${PACKAGES}"
         # Install packages in one go
-        sudo pacman -S --noconfirm --needed ${PACKAGES}
+        sudo pacman -Sy --noconfirm --needed ${PACKAGES}
         ;;
-    n)
+    1) # 'n'
         echo "Skipping package installation."
         ;;
-    q)
-        exit 0
+    *) # Should only happen if prompt_for_user returns non-standard, but kept for safety
+        echo "Package step cancelled or invalid choice."
         ;;
 esac
 
 # 2. Install yay
-prompt_for_user "2. Installing yay"
-choice=$(read -r -p "Enter choice (y/n/q): " | tr '[:upper:]' '[:lower:]')
+if prompt_for_user "2. Installing yay"; then
+    choice=$?
+fi
 
 case "$choice" in
-    y)
+    0) # 'y'
         echo "Cloning yay repository..."
         git clone "$YAY_URL"
         cd yay
         makepkg -si
         cd ..
         ;;
-    n)
+    1) # 'n'
         echo "Skipping yay installation."
         ;;
-    q)
-        exit 0
+    *)
+        echo "Yay step cancelled or invalid choice."
         ;;
 esac
 
 # 3. Add flathub repository
-prompt_for_user "3. Adding flathub repository"
-choice=$(read -r -p "Enter choice (y/n/q): " | tr '[:upper:]' '[:lower:]')
+if prompt_for_user "3. Adding flathub repository"; then
+    choice=$?
+fi
 
 case "$choice" in
-    y)
+    0) # 'y'
         echo "Adding flathub repository."
         flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
         ;;
-    n)
+    1) # 'n'
         echo "Skipping flathub repository addition."
         ;;
-    q)
-        exit 0
+    *)
+        echo "Flathub step cancelled or invalid choice."
         ;;
 esac
 
 # 4. Enable sddm service
-prompt_for_user "4. Enabling sddm service"
-choice=$(read -r -p "Enter choice (y/n/q): " | tr '[:upper:]' '[:lower:]')
+if prompt_for_user "4. Enabling sddm service"; then
+    choice=$?
+fi
 
 case "$choice" in
-    y)
+    0) # 'y'
         echo "Enabling sddm service."
         sudo systemctl enable sddm.service
         ;;
-    n)
+    1) # 'n'
         echo "Skipping sddm service enablement."
         ;;
-    q)
-        exit 0
+    *)
+        echo "SDDM step cancelled or invalid choice."
         ;;
 esac
 
 # 5. Cloning and installing SilentSDDM
-prompt_for_user "5. Cloning and installing SilentSDDM"
-choice=$(read -r -p "Enter choice (y/n/q): " | tr '[:upper:]' '[:lower:]')
+if prompt_for_user "5. Cloning and installing SilentSDDM"; then
+    choice=$?
+fi
 
 case "$choice" in
-    y)
+    0) # 'y'
         echo "Cloning SilentSDDM repository..."
         git clone "$SDDM_REPO"
         cd SilentSDDM
         ./install.sh
         cd ..
         ;;
-    n)
+    1) # 'n'
         echo "Skipping SilentSDDM installation."
         ;;
-    q)
-        exit 0
+    *)
+        echo "SilentSDDM step cancelled or invalid choice."
         ;;
 esac
 
 # 6. Installing AUR Packages
-prompt_for_user "6. Installing AUR packages"
-choice=$(read -r -p "Enter choice (y/n/q): " | tr '[:upper:]' '[:lower:]')
+if prompt_for_user "6. Installing AUR packages"; then
+    choice=$?
+fi
 
 case "$choice" in
-    y)
+    0) # 'y'
         echo "Installing AUR Packages"
         echo "Installing packages via yay:"
         echo "yay -S noctalia-shell xdg-desktop-portal-termfilechooser-hunkyburrito-git"
         yay -S noctalia-shell xdg-desktop-portal-termfilechooser-hunkyburrito-git
         ;;
-    n)
+    1) # 'n'
         echo "Skipping Noctalia installation."
         ;;
-    q)
-        exit 0
+    *)
+        echo "AUR Packages step cancelled or invalid choice."
         ;;
 esac
 
 # 7. Copying dotfiles to home directory, overwriting existing files
-prompt_for_user "7. Copying dotfiles from $DOTFILES_DIR to home directory"
-choice=$(read -r -p "Enter choice (y/n/q): " | tr '[:upper:]' '[:lower:]')
+if prompt_for_user "7. Copying dotfiles from $DOTFILES_DIR to home directory"; then
+    choice=$?
+fi
 
 case "$choice" in
-    y)
+    0) # 'y'
         echo "Copying ~/.config/"
         if [ -d "$DOTFILES_DIR/.config" ]; then
             cp -r "$DOTFILES_DIR/.config" "$HOME"
@@ -179,20 +182,21 @@ case "$choice" in
         echo "Copying .bashrc"
         cp "$DOTFILES_DIR/.bashrc" "$HOME"
         ;;
-    n)
+    1) # 'n'
         echo "Skipping dotfiles copy."
         ;;
-    q)
-        exit 0
+    *)
+        echo "Dotfiles copy step cancelled or invalid choice."
         ;;
 esac
 
 # 8. Create standard user folders and a symlink
-prompt_for_user "8. Creating standard user folders and the drives symlink"
-choice=$(read -r -p "Enter choice (y/n/q): " | tr '[:upper:]' '[:lower:]')
+if prompt_for_user "8. Creating standard user folders and the drives symlink"; then
+    choice=$?
+fi
 
 case "$choice" in
-    y)
+    0) # 'y'
         echo "Creating standard user folders and the drives symlink..."
         
         # Create directories
@@ -201,32 +205,30 @@ case "$choice" in
         echo "Created folders: ~/Downloads, ~/Documents, ~/Drives, ~/Pictures, ~/Videos, and ~/Pictures/Wallpapers"
         
         # Create symlink
-        LINK_TARGET="/run/media/ctrlescape/"
-        SYMLINK_PATH="$HOME/Drives/ctrlescape"
-       
+        LINK_TARGET="/run/media/$USER/"
+        SYMLINK_PATH="$HOME/Drives/"
+        
         echo "Creating symlink: $SYMLINK_PATH -> $LINK_TARGET"
         ln -s "$LINK_TARGET" "$SYMLINK_PATH"
         echo "Successfully created symlink: $SYMLINK_PATH"
         ;;
-    n)
+    1) # 'n'
         echo "Skipping standard folder creation and symlink."
         ;;
-    q)
-        echo "Quitting script."
-        exit 0
-        ;; 
+    *)
+        echo "Folder/Symlink step cancelled or invalid choice."
+        ;;
 esac
 
-
 # 9. Setting xdg-mime defaults based on installed packages
-prompt_for_user "9. Setting xdg-mime defaults based on installed packages"
-choice=$(read -r -p "Enter choice (y/n/q): " | tr '[:upper:]' '[:lower:]')
+if prompt_for_user "9. Setting xdg-mime defaults based on installed packages"; then
+    choice=$?
+fi
 
 case "$choice" in
-    y)
+    0) # 'y'
         echo "Setting xdg-mime defaults..."
-      
-
+        
         # Set specific defaults mentioned by the user
         xdg-mime default yazi.desktop inode/directory
         xdg-mime default vlc.desktop video/x-matroska
@@ -238,13 +240,13 @@ case "$choice" in
         
         echo "xdg-mime defaults set."
         ;;
-    n)
+    1) # 'n'
         echo "Skipping xdg-mime default setting."
         ;;
-    q)
-        echo "Quitting script."
-        exit 0
+    *)
+        echo "MIME defaults step cancelled or invalid choice."
         ;;
 esac
+
 echo "--------------------------------------------------"
 echo "Dotfiles installation finished."
