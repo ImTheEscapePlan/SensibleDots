@@ -6,7 +6,7 @@ linemode = "size"
 show_hidden = true
 show_symlink = true
 sort_translit = true
-scrolloff = 1
+scrolloff = 5
 
 [opener]
 edit = [
@@ -18,6 +18,9 @@ play = [
 imv = [
     { run = 'imv "$@"', desc = "imv", orphan = true }
 ]
+open = [
+    { run = 'xdg-open "$@"', desc = "Open", for = "linux" }
+]
 
 [open]
 rules = [
@@ -27,3 +30,6 @@ rules = [
 append_rules = [
     { mime = "{audio,video}/*", use = "play" }
 ]
+
+
+
