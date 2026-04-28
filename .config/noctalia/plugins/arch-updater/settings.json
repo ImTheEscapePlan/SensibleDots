@@ -1,5 +1,6 @@
 {
-  "checkCmd": "(checkupdates; yay -Qua) 2>/dev/null",
+  "systemCmd": "checkupdates 2>/dev/null",
+  "aurCmd": "yay -Qua 2>/dev/null",
   "updateCmd": "kitty -e bash -c 'echo \"Updating System...\";yay; flatpak update; read -n 1 -p \"Press any key to exit...\"'",
   "flatpak": true,
   "noctalia": true,
@@ -16,5 +17,9 @@
   "iconColor": "none",
   "boldVer": true,
   "tooltip": true,
-  "closeButton": false
+  "closeButton": false,
+  "boldVerPanel": true,
+  "boldVerDesktop": true,
+  "hoverTip": true,
+  "checkCmd": "(checkupdates; yay -Qua) 2>/dev/null"
 }
