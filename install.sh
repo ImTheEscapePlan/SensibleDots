@@ -88,7 +88,7 @@ for step in "${STEPS[@]}"; do
                     "4. Enabling sddm service")
                         echo "Enabling System Service."
                         sudo systemctl enable sddm.service
-                        sudo systemctl --user enable hyprpolkitagent.service
+                        systemctl --user enable hyprpolkitagent.service
                         ;;
                     "5. Cloning and installing SilentSDDM")
                         echo "Cloning SilentSDDM repository..."
