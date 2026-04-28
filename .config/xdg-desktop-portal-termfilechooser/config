@@ -1,8 +1,7 @@
 [filechooser]
 cmd=yazi-wrapper.sh
 default_dir=$HOME
-env=TERMCMD='foot -T "terminal filechooser"'
-    VARIABLE2=VALUE2
+env=TERMCMD='kitty --title "filechooser" -e'
 open_mode = suggested
 save_mode = last
 
@@ -12,5 +11,5 @@ save_mode = last
 ; env=TERMCMD=foot
 
 ; Mode must be one of 'suggested', 'default', or 'last'.
-open_mode=suggested
-save_mode=suggested
+; open_mode=suggested
+; save_mode=suggested

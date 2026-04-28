@@ -20,3 +20,5 @@ function y() {
 export EDITOR=vim
 export VISUAL=vim
 export SYSTEMD_EDITOR=vim
+export TERMCMD="kitty"
+export XDG_CONFIG_HOME="$HOME/.config"
