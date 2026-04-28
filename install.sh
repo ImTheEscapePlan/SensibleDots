@@ -47,7 +47,7 @@ STEPS=(
     "1. Installing packages from the defined list"
     "2. Installing yay"
     "3. Adding flathub repository"
-    "4. Enabling sddm service"
+    "4. Enabling System Services"
     "5. Cloning and installing SilentSDDM"
     "6. Installing AUR Packages (Noctalia)"
     "7. Copying dotfiles from $DOTFILES_DIR to home directory"
@@ -86,8 +86,9 @@ for step in "${STEPS[@]}"; do
                         flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
                         ;;
                     "4. Enabling sddm service")
-                        echo "Enabling sddm service."
+                        echo "Enabling System Service."
                         sudo systemctl enable sddm.service
+                        sudo systemctl --user enable hyprpolkitagent.service
                         ;;
                     "5. Cloning and installing SilentSDDM")
                         echo "Cloning SilentSDDM repository..."
