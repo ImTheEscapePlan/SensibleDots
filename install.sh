@@ -123,6 +123,7 @@ for step in "${STEPS[@]}"; do
                     "8. ")
                         echo "Installing yazi plugins..."
                         ya pkg add macydnah/office
+                        ya pkg add yazi-rs/plugins:mount
                         echo "yazi plugins installed"
                         ;;
                     *)
