@@ -2,7 +2,7 @@
 
 # --- Configuration ---
 # List of packages to install via pacman
-PACKAGES="base-devel pacman-contrib hyprland nodejs npm uwsm  go git vim yazi firefox vlc gparted kitty filelight xdg-utils shared-mime-info perl-file-mimeinfo xdg-desktop-portal-hyprland xdg-desktop-portal-gtk jdk-openjdk imv pavucontrol adwaita-icon-theme breeze-icons sddm qt6 qt6-svg qt6-virtualkeyboard qt6-multimedia-ffmpeg ffmpeg 7zip jq poppler fd ripgrep fzf zoxide resvg imagemagick bcachefs-tools btrfs-progs dosfstools exfatprogs f2fs-tools gpart jfsutils mtools nilfs-utils ntfs-3g polkit hyprpolkitagent udftools flatpak xfsprogs xorg-xhost fastfetch"
+PACKAGES="base-devel pacman-contrib hyprland nodejs npm uwsm libreoffice-fresh go git vim yazi firefox vlc gparted kitty filelight xdg-utils shared-mime-info perl-file-mimeinfo xdg-desktop-portal-hyprland xdg-desktop-portal-gtk jdk-openjdk imv pavucontrol adwaita-icon-theme breeze-icons sddm qt6 qt6-svg qt6-virtualkeyboard qt6-multimedia-ffmpeg ffmpeg 7zip jq poppler fd ripgrep fzf zoxide resvg imagemagick bcachefs-tools btrfs-progs dosfstools exfatprogs f2fs-tools gpart jfsutils mtools nilfs-utils ntfs-3g polkit hyprpolkitagent udftools flatpak xfsprogs xorg-xhost fastfetch"
 
 DOTFILES_DIR="$HOME/SensibleDots"
 YAY_URL="https://aur.archlinux.org/yay.git"
@@ -51,8 +51,9 @@ STEPS=(
     "5. Cloning and installing SilentSDDM"
     "6. Installing AUR Packages (Noctalia)"
     "7. Copying dotfiles from $DOTFILES_DIR to home directory"
-    "8. Creating standard user folders and the drives symlink"
-    "9. Setting xdg-mime defaults based on installed packages"
+    "8. installing yazi plugins"
+    "9. Creating standard user folders and the drives symlink"
+    "10. Setting xdg-mime defaults based on installed packages"
 )
 
 # Loop through all steps
@@ -119,7 +120,16 @@ for step in "${STEPS[@]}"; do
                         echo "Copying .bashrc"
                         cp "$DOTFILES_DIR/.bashrc" "$HOME"
                         ;;
-                    "8. Creating standard user folders and the drives symlink")
+                    "8. ")
+                        echo "Installing yazi plugins..."
+                        ya pkg add macydnah/office
+                        echo "yazi plugins installed"
+                        ;;
+                    *)
+                        echo "Unknown step in case statement for step: $step"
+                        ;;
+
+                    "9. Creating standard user folders and the drives symlink")
                         echo "Creating standard user folders and the drives symlink..."
                         mkdir -p ~/Downloads ~/Documents ~/Drives ~/Pictures ~/Videos
                         mkdir -p ~/Pictures/Wallpapers
@@ -131,7 +141,7 @@ for step in "${STEPS[@]}"; do
                         ln -s "$LINK_TARGET" "$SYMLINK_PATH"
                         echo "Successfully created symlink: $SYMLINK_PATH"
                         ;;
-                    "9. Setting xdg-mime defaults based on installed packages")
+                    "10. Setting xdg-mime defaults based on installed packages")
                         echo "Setting xdg-mime defaults..."
                         xdg-mime default yazi.desktop inode/directory
                         xdg-mime default vlc.desktop video/x-matroska

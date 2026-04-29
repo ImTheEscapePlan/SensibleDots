@@ -40,7 +40,7 @@ set autoindent
 set smartindent
 set backspace=indent,eol,start
 set incsearch
-set scrolloff=1
+set scrolloff=5
 let g:airline_theme = 'onedark'
 let g:airline_powerline_fonts = 1
 let g:ctrlp_show_hidden = 1
