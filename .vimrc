@@ -1,4 +1,5 @@
-set termguicolors
+set t_Co=256
+set notermguicolors
 set background=dark
 
 
@@ -14,7 +15,6 @@ call plug#begin()
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'ctrlpvim/ctrlp.vim'
-Plug 'joshdick/onedark.vim'
 Plug 'neoclide/coc.nvim', { 'branch': 'release' }
 Plug 'junegunn/goyo.vim'
 Plug 'junegunn/limelight.vim'
@@ -24,7 +24,7 @@ call plug#end()
 " vim specific rules here
 syntax on
 filetype plugin indent on
-colorscheme onedark
+highlight SignColumn guibg=NONE ctermbg=NONE
 set encoding=utf-8
 set nobackup
 set nowritebackup
@@ -41,7 +41,8 @@ set smartindent
 set backspace=indent,eol,start
 set incsearch
 set scrolloff=5
-let g:airline_theme = 'onedark'
+let g:limelight_conceal_ctermfg = 240
+let g:airline_theme = 'minimalist'
 let g:airline_powerline_fonts = 1
 let g:ctrlp_show_hidden = 1
 let NERDTreeShowHidden = 1
