@@ -50,6 +50,7 @@ autocmd! User GoyoEnter Limelight
 autocmd! User GoyoLeave Limelight!
 runtime! macros/matchit.vim
 nnoremap <C-n> :NERDTreeToggle<CR>
+nnoremap <C-t> :botright terminal ++rows=10<CR>
 
 " coc.nvim rules here
 inoremap <silent><expr> <TAB>
