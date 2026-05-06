@@ -21,11 +21,15 @@ imv = [
 open = [
     { run = 'xdg-open "$@"', desc = "Open", for = "linux" }
 ]
+office = [
+    { run = 'xdg-open "$@"', desc = "LibreOffice" }
+]
 
 [open]
 rules = [
     { mime = "text/*", use = "edit" },
-    { mime = "image/*", use = "imv" }
+    { mime = "image/*", use = "imv" },
+    { url = "*", use = "open" }
 ]
 append_rules = [
     { mime = "{audio,video}/*", use = "play" }
