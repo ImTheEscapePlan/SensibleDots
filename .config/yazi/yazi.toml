@@ -21,14 +21,28 @@ imv = [
 open = [
     { run = 'xdg-open "$@"', desc = "Open", for = "linux" }
 ]
-office = [
-    { run = 'xdg-open "$@"', desc = "LibreOffice" }
+extract = [
+    { run = 'for f in "$@"; do 7z x "$f" -o"${f%.*}"; done', desc = "Extract Archive", block = true }
 ]
 
 [open]
-rules = [
+
+prepend_rules = [
     { mime = "text/*", use = "edit" },
     { mime = "image/*", use = "imv" },
+    { mime = "application/zip", use = "extract" },
+    { mime = "application/x-7z-compressed", use = "extract" },
+    { mime = "application/x-rar-compressed", use = "extract" },
+    { mime = "application/x-tar", use = "extract" },
+    { mime = "application/gzip", use = "extract" },
+    { mime = "application/x-gzip", use = "extract" },
+    { mime = "application/x-bzip2", use = "extract" },
+    { mime = "application/x-xz", use = "extract" },
+    { mime = "application/x-wim", use = "extract" },
+    { mime = "application/x-arj", use = "extract" },
+    { mime = "application/vnd.ms-cab-compressed", use = "extract" }
+]
+rules = [
     { url = "*", use = "open" }
 ]
 append_rules = [
