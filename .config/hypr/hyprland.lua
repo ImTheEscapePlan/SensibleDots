@@ -22,14 +22,16 @@ hl.monitor({
     scale    = "auto",
 })
 
+
+
 ---------------------
 ---- MY PROGRAMS ----
 ---------------------
 
 -- Set programs that you use
 local terminal    = "kitty"
-local fileManager = "yazi"
-local textEditor  = "vim"
+local fileManager = "kitty -e yazi"
+local textEditor  = "kitty -e vim"
 
 
 -------------------
@@ -250,18 +252,18 @@ hl.device({
 ---------------------
 
 local mainMod = "SUPER" -- Sets "Windows" key as main modifier
-local ipc = "qs -c noctalia-shell ipc call"
+-- local ipc = "qs -c noctalia-shell ipc call"
 
 -- Example binds, see https://wiki.hypr.land/Configuring/Basics/Binds/ for more
 hl.bind(mainMod .. " + tab", hl.dsp.exec_cmd(terminal))
 hl.bind(mainMod .. " + W", hl.dsp.exec_cmd("firefox"))
 hl.bind(mainMod .. " + M", hl.dsp.exec_cmd("command -v hyprshutdown >/dev/null 2>&1 && hyprshutdown || hyprctl dispatch 'hl.dsp.exit()'"))
-hl.bind(mainMod .. " + E", hl.dsp.exec_cmd("kitty -e" .. fileManager))
+hl.bind(mainMod .. " + E", hl.dsp.exec_cmd(fileManager))
 hl.bind(mainMod .. " + R", hl.dsp.layout("togglesplit"))    -- dwindle only
 hl.bind(mainMod .. " + P", hl.dsp.window.pseudo())
-hl.bind(mainMod .. " + V", hl.dsp.exec_cmd("kitty -e" .. textEditor))
-hl.bind(mainMod .. " + comma", hl.dsp.exec_cmd(ipc .. "settings toggle"))
-hl.bind(mainMod .. " + " .. mainMod .. "_L", hl.dsp.exec_cmd(ipc .. "launcher toggle"), { release = true, non_consuming = true })
+hl.bind(mainMod .. " + V", hl.dsp.exec_cmd(textEditor))
+hl.bind(mainMod .. " + comma", hl.dsp.exec_cmd("qs -c noctalia-shell ipc call settings toggle"))
+hl.bind(mainMod .. " + " .. mainMod .. "_L", hl.dsp.exec_cmd("qs -c noctalia-shell ipc call launcher toggle"), { release = true, non_consuming = true })
 
 -- Move focus with mainMod + arrow keys
 hl.bind(mainMod .. " + left",  hl.dsp.focus({ direction = "left" }))
@@ -312,18 +314,18 @@ hl.bind(mainMod .. " + mouse:272", hl.dsp.window.drag(),   { mouse = true })
 hl.bind(mainMod .. " + mouse:273", hl.dsp.window.resize(), { mouse = true })
 
 -- Laptop multimedia keys for volume and LCD brightness
-hl.bind("XF86AudioRaiseVolume", hl.dsp.exec_cmd(ipc .. "volume increase"), { locked = true, repeating = true })
-hl.bind("XF86AudioLowerVolume", hl.dsp.exec_cmd(ipc .. "volume decrease"),      { locked = true, repeating = true })
-hl.bind("XF86AudioMute",        hl.dsp.exec_cmd(ipc .. "volume muteOutput"),     { locked = true, repeating = true })
+hl.bind("XF86AudioRaiseVolume", hl.dsp.exec_cmd("qs -c noctalia-shell ipc call volume increase"), { locked = true, repeating = true })
+hl.bind("XF86AudioLowerVolume", hl.dsp.exec_cmd("qs -c noctalia-shell ipc call volume decrease"),      { locked = true, repeating = true })
+hl.bind("XF86AudioMute",        hl.dsp.exec_cmd("qs -c noctalia-shell ipc call volume muteOutput"),     { locked = true, repeating = true })
 hl.bind("XF86AudioMicMute",     hl.dsp.exec_cmd("wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle"),   { locked = true, repeating = true })
-hl.bind("XF86MonBrightnessUp",  hl.dsp.exec_cmd(ipc .. "brightness increase"),                  { locked = true, repeating = true })
-hl.bind("XF86MonBrightnessDown",hl.dsp.exec_cmd(ipc .. "brightness decrease"),                  { locked = true, repeating = true })
+hl.bind("XF86MonBrightnessUp",  hl.dsp.exec_cmd("qs -c noctalia-shell ipc call brightness increase"),                  { locked = true, repeating = true })
+hl.bind("XF86MonBrightnessDown",hl.dsp.exec_cmd("qs -c noctalia-shell ipc call brightness decrease"),                  { locked = true, repeating = true })
 
 -- Requires playerctl
-hl.bind("XF86AudioNext",  hl.dsp.exec_cmd(ipc .. "media next"),       { locked = true })
-hl.bind("XF86AudioPause", hl.dsp.exec_cmd(ipc .. "media playPause"), { locked = true })
-hl.bind("XF86AudioPlay",  hl.dsp.exec_cmd(ipc .. "media play"), { locked = true })
-hl.bind("XF86AudioPrev",  hl.dsp.exec_cmd(ipc .. "media previous"),   { locked = true })
+hl.bind("XF86AudioNext",  hl.dsp.exec_cmd("qs -c noctalia-shell ipc call media next"),       { locked = true })
+hl.bind("XF86AudioPause", hl.dsp.exec_cmd("qs -c noctalia-shell ipc call media playPause"), { locked = true })
+hl.bind("XF86AudioPlay",  hl.dsp.exec_cmd("qs -c noctalia-shell ipc call media play"), { locked = true })
+hl.bind("XF86AudioPrev",  hl.dsp.exec_cmd("qs -c noctalia-shell ipc call media previous"),   { locked = true })
 
 
 --------------------------------
