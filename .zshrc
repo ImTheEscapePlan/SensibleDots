@@ -28,5 +28,6 @@ export XDG_CONFIG_HOME="$HOME/.config"
 source '/usr/share/zsh-antidote/antidote.zsh'
 antidote load
 
+eval "$(fzf --zsh)"
 eval "$(starship init zsh)"
 fastfetch
