@@ -53,6 +53,11 @@
             "key": "memory",
             "keyColor": "33",
         },
+        {
+            "type": "disk",
+            "key": "disk",
+            "keyColor": "33"
+        },
         "break",
     ]
 }
