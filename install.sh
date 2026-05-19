@@ -114,11 +114,19 @@ for step in "${STEPS[@]}"; do
                         
                         echo "Copying yazi.desktop to /usr/share/applications/ (will prompt for sudo password if necessary)"
                         sudo cp "$DOTFILES_DIR/yazi.desktop" /usr/share/applications/
+                        
                         echo "Copying .vimrc"
-                        cp "$DOTFILES_DIR/.vimrc" "$HOME"
+                        sudo cp "$DOTFILES_DIR/.vimrc" "$HOME"
                         
                         echo "Copying .bashrc"
-                        cp "$DOTFILES_DIR/.bashrc" "$HOME"
+                        sudo cp "$DOTFILES_DIR/.bashrc" "$HOME"
+                        
+                        echo "copying .zshrc and plugins"
+                        sudo cp "$DOTFILES_DIR/.zshrc" "$HOME"
+                        sudo cp "$DOTFILES_DIR/.zsh_plugins.txt" "$HOME"
+                        
+                        echo "setting zsh as default"
+                        chsh -s $(which zsh)
                         ;;
                     "8. ")
                         echo "Installing yazi plugins..."
