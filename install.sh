@@ -2,11 +2,10 @@
 
 # --- Configuration ---
 # List of packages to install via pacman
-PACKAGES="base-devel pacman-contrib hyprland nodejs npm starship ttf-jetbrains-mono-nerd btop uwsm libreoffice-fresh mission-center go git github-cli vim yazi firefox vlc gparted kitty filelight xdg-utils shared-mime-info perl-file-mimeinfo xdg-desktop-portal-hyprland xdg-desktop-portal-gtk jdk-openjdk imv pavucontrol adwaita-icon-theme breeze-icons sddm qt6 qt6-svg qt6-virtualkeyboard qt6-multimedia-ffmpeg ffmpeg 7zip jq poppler fd ripgrep fzf zoxide resvg imagemagick bcachefs-tools btrfs-progs dosfstools exfatprogs f2fs-tools gpart jfsutils mtools nilfs-utils ntfs-3g polkit hyprpolkitagent udftools flatpak xfsprogs xorg-xhost fastfetch zsh"
+PACKAGES="base-devel pacman-contrib hyprland nodejs npm starship ttf-jetbrains-mono-nerd btop uwsm libreoffice-fresh mission-center go git github-cli vim yazi firefox vlc gparted kitty filelight xdg-utils shared-mime-info perl-file-mimeinfo xdg-desktop-portal-hyprland xdg-desktop-portal-gtk jdk-openjdk imv pavucontrol adwaita-icon-theme breeze-icons greetd greetd-tuigreet qt6 qt6-svg qt6-virtualkeyboard qt6-multimedia-ffmpeg ffmpeg 7zip jq poppler fd ripgrep fzf zoxide resvg imagemagick bcachefs-tools btrfs-progs dosfstools exfatprogs f2fs-tools gpart jfsutils mtools nilfs-utils ntfs-3g polkit hyprpolkitagent udftools flatpak xfsprogs xorg-xhost fastfetch zsh"
 
 DOTFILES_DIR="$HOME/SensibleDots"
 YAY_URL="https://aur.archlinux.org/yay.git"
-SDDM_REPO="https://github.com/uiriansan/SilentSDDM"
 
 # Function to get user confirmation
 prompt_for_user() {
@@ -47,8 +46,8 @@ STEPS=(
     "1. Installing packages from the defined list"
     "2. Installing yay"
     "3. Adding flathub repository"
-    "4. Enabling System Services"
-    "5. Cloning and installing SilentSDDM"
+    "4. Installing greetd config"
+    "5. Enabling greetd service"
     "6. Installing AUR Packages (Noctalia)"
     "7. Copying dotfiles from $DOTFILES_DIR to home directory"
     "8. installing yazi plugins"
@@ -86,17 +85,14 @@ for step in "${STEPS[@]}"; do
                         echo "Adding flathub repository."
                         flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
                         ;;
-                    "4. Enabling sddm service")
-                        echo "Enabling System Service."
-                        sudo systemctl enable sddm.service
-                        systemctl --user enable hyprpolkitagent.service
+                    "4. Installing greetd config")
+                        echo "Copying greetd config..."
+                        sudo cp "$DOTFILES_DIR/config.toml" /etc/greetd/
                         ;;
                     "5. Cloning and installing SilentSDDM")
-                        echo "Cloning SilentSDDM repository..."
-                        git clone "$SDDM_REPO"
-                        cd SilentSDDM
-                        ./install.sh
-                        cd ..
+                        echo "Enabling System Service."
+                        sudo systemctl enable greetd.service
+                        systemctl --user enable hyprpolkitagent.service
                         ;;
                     "6. Installing AUR Packages (Noctalia)")
                         echo "Installing AUR Packages"
