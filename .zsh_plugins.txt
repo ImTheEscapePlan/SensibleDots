@@ -3,6 +3,7 @@ getantidote/use-omz
 ohmyzsh/ohmyzsh path:plugins/git
 
 # User plugins
+Aloxaf/fzf-tab
 zsh-users/zsh-syntax-highlighting
 zsh-users/zsh-autosuggestions
 zsh-users/zsh-history-substring-search
