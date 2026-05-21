@@ -14,7 +14,7 @@ endif
 call plug#begin()
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
-Plug 'ctrlpvim/ctrlp.vim'
+Plug 'junegunn/fzf.vim'
 Plug 'neoclide/coc.nvim', { 'branch': 'release' }
 Plug 'junegunn/goyo.vim'
 Plug 'junegunn/limelight.vim'
@@ -51,6 +51,7 @@ autocmd! User GoyoLeave Limelight!
 runtime! macros/matchit.vim
 nnoremap <C-n> :NERDTreeToggle<CR>
 nnoremap <C-t> :botright terminal ++rows=10<CR>
+nnoremap <C-p> :Files<CR>
 
 " coc.nvim rules here
 inoremap <silent><expr> <TAB>
