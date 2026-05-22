@@ -122,7 +122,7 @@ for step in "${STEPS[@]}"; do
                         sudo cp "$DOTFILES_DIR/.zsh_plugins.txt" "$HOME"
                         
                         echo "setting zsh as default"
-                        chsh -s $(/usr/bin/zsh)
+                        chsh -s $(which zsh)
                         ;;
                     "8. ")
                         echo "Installing yazi plugins..."
