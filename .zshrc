@@ -2,7 +2,7 @@
 HISTFILE=~/.histfile
 HISTSIZE=1000
 SAVEHIST=1000
-# bindkey -v
+bindkey -v
 # End of lines configured by zsh-newuser-install
 # The following lines were added by compinstall
 zstyle :compinstall filename '/home/ctrlescape/.zshrc'
@@ -29,5 +29,6 @@ source '/usr/share/zsh-antidote/antidote.zsh'
 antidote load
 
 eval "$(fzf --zsh)"
+eval "$(zoxide init zsh)"
 eval "$(starship init zsh)"
 fastfetch
