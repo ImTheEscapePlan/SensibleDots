@@ -19,6 +19,12 @@ function y() {
 	command rm -f -- "$tmp"
 }
 
+# insert custom aliases here
+alias ls='eza --icons --color=always --group-directories-first'
+alias ll='eza -al --icons --git --group-directories-first'
+alias lt='eza --tree --level=2 --icons'
+# end of aliases
+
 export EDITOR=vim
 export VISUAL=vim
 export SYSTEMD_EDITOR=vim
