@@ -19,6 +19,7 @@ Plug 'neoclide/coc.nvim', { 'branch': 'release' }
 Plug 'junegunn/goyo.vim'
 Plug 'junegunn/limelight.vim'
 Plug 'preservim/nerdtree'
+Plug 'ryanoasis/vim-devicons'
 call plug#end()
 
 " vim specific rules here
