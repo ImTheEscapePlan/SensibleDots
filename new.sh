@@ -7,27 +7,96 @@
 # --- STEP DEFINITIONS ---
 # Define your custom steps as standard Bash functions here.
 
+PACKAGES="base-devel pacman-contrib eza hyprland nodejs npm starship adwaita-fonts ttc-iosevka ttf-nerd-font-symbols-mono btop uwsm libreoffice-fresh mission-center go git github-cli vim yazi firefox vlc gparted kitty filelight xdg-utils shared-mime-info perl-file-mimeinfo xdg-desktop-portal-hyprland xdg-desktop-portal-gtk jdk-openjdk imv pavucontrol adwaita-icon-theme breeze-icons greetd greetd-tuigreet qt6 qt6-svg qt6-virtualkeyboard qt6-multimedia-ffmpeg ffmpeg 7zip jq poppler fd ripgrep fzf zoxide resvg imagemagick bcachefs-tools btrfs-progs dosfstools exfatprogs f2fs-tools gpart jfsutils mtools nilfs-utils ntfs-3g polkit hyprpolkitagent udftools flatpak xfsprogs xorg-xhost fastfetch zsh"
+DOTFILES_DIR="$HOME/SensibleDots"
+YAY_URL="https://aur.archlinux.org/yay.git"
+
 step_one() {
-    echo "-> Running Step 1: Updating system logs..."
-    # Add your actual logic here
-    sleep 1 
+    echo "-> Running Step 1: Installing packages from the defined list..."
+    sudo pacman -Sy --noconfirm --needed ${PACKAGES}
+    sleep 1
     echo "-> Step 1 completed successfully."
 }
 
 step_two() {
-    echo "-> Running Step 2: Clearing temporary caches..."
+    echo "-> Running Step 2: Installing yay..."
     # Add your actual logic here
+    git clone "$YAY_URL"
+    cd yay
+    makepkg -si
+    cd ..
     sleep 1
     echo "-> Step 2 completed successfully."
 }
 
 step_three() {
-    echo "-> Running Step 3: Generating system report..."
+    echo "-> Running Step 3: Adding flathub repository..."
     # Add your actual logic here
+    flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
     sleep 1
     echo "-> Step 3 completed successfully."
 }
 
+step_four() {
+    echo "-> Running Step 4: Installing greetd config..."
+    sudo cp "$DOTFILES_DIR/config.toml" /etc/greetd/config.toml
+    sleep 1
+    echo "-> Step 4 completed successfully."
+}
+
+step_five() {
+    echo "-> Running Step 5: Enabling greetd service..."
+    sudo systemctl enable greetd.service
+    systemctl --user enable hyprpolkitagent.service
+    sleep 1
+    echo "-> Step 5 completed successfully."
+}
+
+step_six() {
+    echo "-> Running Step 6: Installing AUR Packages..."
+    yay -s noctalia-shell xdg-desktop-portal-termfilechooser-hunkyburrito-git zsh-antidote zsh-patina-bin
+    sleep 1
+    echo "-> Step 6 completed successfully."
+}
+
+step_seven() {
+    echo "-> Running Step 7: Copying dotfiles from $DOTFILES_DIR to home directory..."
+    sudo cp -r "$DOTFILES_DIR/.config" "$HOME"
+    sudo cp "$DOTFILES_DIR/yazi.desktop" /usr/share/applications/
+    sudo cp "$DOTFILES_DIR/.vimrc" "$HOME"
+    sudo cp "$DOTFILES_DIR/.bashrc" "$HOME"
+    sudo cp "$DOTFILES_DIR/.zshrc" "$HOME"
+    sudo cp "$DOTFILES_DIR/.zsh_plugins.txt" "$HOME"
+    sleep 1
+    echo "-> Step 7 completed successfully."
+}
+
+step_eight() {
+    echo "-> Running Step 8: setting zsh as default..."
+    chsh -s $(which zsh)
+    sleep 1
+    echo "-> Step 8 completed successfully."
+}
+
+step_nine() {
+    echo "-> Running step 9: Installing yazi plugins..."
+    ya pkg add macydnah/office
+    ya pkg add yazi-rs/plugins:mount
+    ya pkg add imsi32/yatline
+    sleep 1
+    echo "-> Step 9 completed successfully."
+}
+
+step_ten() {
+    echo "-> Running step 10: Creating folders and symlinks"
+    mkdir -p ~/Downloads ~/Documents ~/Drives ~/Pictures ~/Videos
+    mkdir -p ~/Pictures/Wallpapers
+    LINK_TARGET="/run/media/$USER/"
+    SYMLINK_PATH="$HOME/Drives/"
+    ln -s "$LINK_TARGET" "$SYMLINK_PATH"
+    sleep 1
+    echo "-> Step 10 completed successfully."
+}
 
 # --- CORE ENGINE ---
 # This function manages the prompts, validation loop, skips, and exits.
@@ -77,9 +146,9 @@ main() {
     echo -e "Controls: [Y]es/Continue  |  [N]o/Skip  |  [Q]uit Script\n"
 
     # Register your steps here: run_step "Friendly Name" function_name
-    run_step "System Log Update" step_one
-    run_step "Cache Cleanup" step_two
-    run_step "Report Generation" step_three
+    run_step "Installing packages from defined list" step_one
+    run_step "Installing yay" step_two
+    run_step "Adding flathub repository" step_three
 
     echo "=================================================="
     echo " All pipeline steps processed successfully!"
