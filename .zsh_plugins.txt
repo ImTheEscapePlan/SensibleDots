@@ -4,7 +4,7 @@ ohmyzsh/ohmyzsh path:plugins/git
 
 # User plugins
 Aloxaf/fzf-tab
-zdharma-continuum/fast-syntax-highlighting
+jeffreytse/zsh-vi-mode
 zsh-users/zsh-autosuggestions
 zsh-users/zsh-history-substring-search
 MichaelAquilina/zsh-you-should-use

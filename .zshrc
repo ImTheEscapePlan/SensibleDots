@@ -2,7 +2,6 @@
 HISTFILE=~/.histfile
 HISTSIZE=1000
 SAVEHIST=1000
-bindkey -v
 # End of lines configured by zsh-newuser-install
 # The following lines were added by compinstall
 zstyle :compinstall filename '/home/ctrlescape/.zshrc'
@@ -24,6 +23,7 @@ export VISUAL=vim
 export SYSTEMD_EDITOR=vim
 export TERMCMD="kitty"
 export XDG_CONFIG_HOME="$HOME/.config"
+ZVM_INIT_MODE=sourcing
 
 source '/usr/share/zsh-antidote/antidote.zsh'
 antidote load
@@ -31,6 +31,7 @@ antidote load
 eval "$(fzf --zsh)"
 eval "$(zoxide init zsh --cmd cd)"
 eval "$(starship init zsh)"
+eval "$(zsh-patina activate)"
 fastfetch
 
 # insert custom aliases here

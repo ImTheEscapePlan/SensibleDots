@@ -97,8 +97,8 @@ for step in "${STEPS[@]}"; do
                     "6. Installing AUR Packages (Noctalia)")
                         echo "Installing AUR Packages"
                         echo "Installing packages via yay:"
-                        echo "yay -S noctalia-shell xdg-desktop-portal-termfilechooser-hunkyburrito-git"
-                        yay -S noctalia-shell xdg-desktop-portal-termfilechooser-hunkyburrito-git zsh-antidote
+                        echo "yay -S noctalia-shell xdg-desktop-portal-termfilechooser-hunkyburrito-git zsh-antidote zsh-patina-bin"
+                        yay -S noctalia-shell xdg-desktop-portal-termfilechooser-hunkyburrito-git zsh-antidote zsh-patina-bin
                         ;;
                     "7. Copying dotfiles from $DOTFILES_DIR to home directory")
                         echo "Copying ~/.config/"
