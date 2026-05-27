@@ -249,7 +249,6 @@ symbol = " "
 
 [python]
 symbol = " "
-format = '[(${virtualenv} )](style)'
 
 [raku]
 symbol = "󱖊 "
