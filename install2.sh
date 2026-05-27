@@ -8,8 +8,11 @@
 # Define your custom steps as standard Bash functions here.
 
 PACKAGES="base-devel pacman-contrib eza hyprland nodejs npm starship adwaita-fonts ttc-iosevka ttf-nerd-font-symbols-mono btop uwsm libreoffice-fresh mission-center go git github-cli vim yazi firefox vlc gparted kitty filelight xdg-utils shared-mime-info perl-file-mimeinfo xdg-desktop-portal-hyprland xdg-desktop-portal-gtk jdk-openjdk imv pavucontrol adwaita-icon-theme breeze-icons greetd greetd-tuigreet qt6 qt6-svg qt6-virtualkeyboard qt6-multimedia-ffmpeg ffmpeg 7zip jq poppler fd ripgrep fzf zoxide resvg imagemagick bcachefs-tools btrfs-progs dosfstools exfatprogs f2fs-tools gpart jfsutils mtools nilfs-utils ntfs-3g polkit hyprpolkitagent udftools flatpak xfsprogs xorg-xhost fastfetch zsh"
+
 DOTFILES_DIR="$HOME/SensibleDots"
 YAY_URL="https://aur.archlinux.org/yay.git"
+LINK_TARGET="/run/media/$USER/"
+SYMLINK_PATH="$HOME/Drives/"
 
 step_one() {
     echo "-> Running Step 1: Installing packages from the defined list..."
@@ -88,14 +91,21 @@ step_nine() {
 }
 
 step_ten() {
-    echo "-> Running step 10: Creating folders and symlinks"
+    echo "-> Running step 10: Creating folders and symlinks..."
     mkdir -p ~/Downloads ~/Documents ~/Drives ~/Pictures ~/Videos
     mkdir -p ~/Pictures/Wallpapers
-    LINK_TARGET="/run/media/$USER/"
-    SYMLINK_PATH="$HOME/Drives/"
     ln -s "$LINK_TARGET" "$SYMLINK_PATH"
     sleep 1
     echo "-> Step 10 completed successfully."
+}
+
+step_eleven() {
+    echo "-> Running step 11: Setting xdg-mime defaults..."
+    xdg-mime default yazi.desktop inode/directory
+    xdg-mime default vlc.desktop video/x-matroska
+    xdg-mime default imv.desktop image/jpeg
+    sleep 1
+    echo "-> Step 11 completed successfully"
 }
 
 # --- CORE ENGINE ---
@@ -141,7 +151,7 @@ run_step() {
 
 main() {
     echo "=================================================="
-    echo " Starting Script Automation Pipeline"
+    echo " Starting Installation of SensibleDots"
     echo "=================================================="
     echo -e "Controls: [Y]es/Continue  |  [N]o/Skip  |  [Q]uit Script\n"
 
@@ -149,9 +159,17 @@ main() {
     run_step "Installing packages from defined list" step_one
     run_step "Installing yay" step_two
     run_step "Adding flathub repository" step_three
+    run_step "Installing greetd config" step_four
+    run_step "Enabling greetd service" step_five
+    run_step "Installing AUR Packages" step_six
+    run_step "Copying dotfiles from $DOTFILES_DIR to home directory" step_seven
+    run_step "setting zsh as default" step_eight
+    run_step "Installing yazi plugins" step_nine
+    run_step "Creating folders and symlinks" step_ten
+    run_step "Setting xdg-mime defaults" step_eleven
 
     echo "=================================================="
-    echo " All pipeline steps processed successfully!"
+    echo " Installation of SensibleDots Completed"
     echo "=================================================="
 }
 
