@@ -42,11 +42,19 @@ set smartindent
 set backspace=indent,eol,start
 set incsearch
 set scrolloff=5
+set mouse=a
 let g:limelight_conceal_ctermfg = 240
 let g:airline_theme = 'minimalist'
 let g:airline_powerline_fonts = 1
 let g:ctrlp_show_hidden = 1
 let NERDTreeShowHidden = 1
+
+" change cursor to a thin vertical bar in insert mode
+let &t_SI = "\e[6 q"
+
+" Reset cursor back to a block in normal mode
+let &t_EI = "\e[2 q"
+
 autocmd! User GoyoEnter Limelight
 autocmd! User GoyoLeave Limelight!
 runtime! macros/matchit.vim
