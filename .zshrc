@@ -23,6 +23,7 @@ alias ls='eza --icons --color=always --group-directories-first'
 alias ll='eza -al --icons --git --group-directories-first'
 alias lt='eza --tree --level=2 --icons'
 alias vim='nvim'
+# comment out vim alias line if you want to use regular vim
 # end of aliases
 
 export EDITOR=nvim
@@ -32,6 +33,7 @@ export TERMINAL="kitty"
 export TERMCMD="kitty"
 export XDG_CONFIG_HOME="$HOME/.config"
 ZVM_INIT_MODE=sourcing
+# Editor/Visual 'Export' sections can be changed to use vim
 
 source '/usr/share/zsh-antidote/antidote.zsh'
 antidote load
