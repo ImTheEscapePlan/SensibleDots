@@ -130,7 +130,14 @@ return {
         keys = {
             { "<leader>e", "<cmd>Neotree toggle<cr>", desc = "Toggle Neo-tree" }
         },
-        opts = {}
+        opts = {
+            window = {
+                mappings = {
+                    ["."] = "toggle_hidden",
+                    [".."] = "navigate_up",
+                },
+            },
+        },
     },
     {
         "Crysthamus/nvim-file-operations",
