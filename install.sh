@@ -7,7 +7,7 @@
 # --- STEP DEFINITIONS ---
 # Define your custom steps as standard Bash functions here.
 
-PACKAGES="base-devel pacman-contrib eza hyprland nodejs npm starship adwaita-fonts ttc-iosevka ttf-nerd-fonts-symbols-mono btop uwsm libreoffice-fresh mission-center go git github-cli vim yazi firefox vlc gparted kitty filelight xdg-utils shared-mime-info perl-file-mimeinfo xdg-desktop-portal-hyprland xdg-desktop-portal-gtk jdk-openjdk imv pavucontrol adwaita-icon-theme breeze-icons greetd greetd-tuigreet qt6 qt6-svg qt6-virtualkeyboard qt6-multimedia-ffmpeg ffmpeg 7zip jq poppler fd ripgrep fzf zoxide resvg imagemagick bcachefs-tools btrfs-progs dosfstools exfatprogs f2fs-tools gpart jfsutils mtools nilfs-utils ntfs-3g polkit hyprpolkitagent udftools flatpak xfsprogs xorg-xhost fastfetch zsh"
+PACKAGES="base-devel pacman-contrib eza hyprland nodejs npm starship adwaita-fonts ttc-iosevka ttf-nerd-fonts-symbols-mono btop uwsm libreoffice-fresh mission-center go git github-cli vim neovim luarocks tree-sitter-cli yazi firefox vlc gparted kitty filelight xdg-utils shared-mime-info perl-file-mimeinfo xdg-desktop-portal-hyprland xdg-desktop-portal-gtk jdk-openjdk imv pavucontrol adwaita-icon-theme breeze-icons greetd greetd-tuigreet qt6 qt6-svg qt6-virtualkeyboard qt6-multimedia-ffmpeg ffmpeg 7zip jq poppler fd ripgrep fzf zoxide resvg imagemagick bcachefs-tools btrfs-progs dosfstools exfatprogs f2fs-tools gpart jfsutils mtools nilfs-utils ntfs-3g polkit hyprpolkitagent udftools flatpak xfsprogs xorg-xhost fastfetch zsh"
 
 DOTFILES_DIR="$HOME/SensibleDots"
 YAY_URL="https://aur.archlinux.org/yay.git"
