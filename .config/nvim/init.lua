@@ -1,0 +1,33 @@
+-- ~/.config/nvim/init.lua
+
+-- 1. Global Leader Definitions
+vim.g.mapleader = " "
+vim.g.maplocalleader = " "
+
+-- 2. Quality of Life Settings
+vim.opt.number = false
+vim.opt.relativenumber = false
+vim.opt.splitright = true
+vim.opt.splitbelow = true
+vim.opt.expandtab = true
+vim.opt.shiftwidth = 4
+vim.opt.tabstop = 4
+vim.opt.termguicolors = true
+vim.opt.scrolloff = 5
+
+vim.diagnostic.config({
+    virtual_text = {
+        spacing = 4,
+        source = "if_many",
+        prefix = ">",
+    },
+    severity_sort = true,
+})
+
+-- 3. Run the Lazy Bootstrapper & Plugin Specs
+require("config.lazy") -- Links to your lazy setup
+require("fzf-lua").setup({})
+require('matugen').setup()
+
+vim.keymap.set("n", "<C-p>", "<cmd>lua require('fzf-lua').files()<CR>", { silent = true })
+vim.keymap.set('n', '<C-n>', ':Neotree toggle<CR>', { desc = 'Toggle Neo-tree' })
