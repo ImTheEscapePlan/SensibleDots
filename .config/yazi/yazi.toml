@@ -10,7 +10,7 @@ scrolloff = 5
 
 [opener]
 edit = [
-    { run = 'vim "$@"', block = true, desc = "Vim" }
+    { run = '"$EDITOR" "$@"', desc = "Editor", block = true, for = "linux" }
 ]
 play = [
     { run = 'vlc "$@"', block = false, desc = "VLC", for = "unix" }
@@ -40,7 +40,8 @@ prepend_rules = [
     { mime = "application/x-xz", use = "extract" },
     { mime = "application/x-wim", use = "extract" },
     { mime = "application/x-arj", use = "extract" },
-    { mime = "application/vnd.ms-cab-compressed", use = "extract" }
+    { mime = "application/vnd.ms-cab-compressed", use = "extract" },
+    { url = "*.7z", use = "extract" }
 ]
 rules = [
     { url = "*", use = "open" }
