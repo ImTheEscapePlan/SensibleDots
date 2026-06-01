@@ -1,176 +1,177 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
-# --- Configuration ---
-# List of packages to install via pacman
-PACKAGES="base-devel pacman-contrib eza hyprland nodejs npm starship adwaita-fonts ttc-iosevka ttf-nerd-font-symbols-mono btop uwsm libreoffice-fresh mission-center go git github-cli vim yazi firefox vlc gparted kitty filelight xdg-utils shared-mime-info perl-file-mimeinfo xdg-desktop-portal-hyprland xdg-desktop-portal-gtk jdk-openjdk imv pavucontrol adwaita-icon-theme breeze-icons greetd greetd-tuigreet qt6 qt6-svg qt6-virtualkeyboard qt6-multimedia-ffmpeg ffmpeg 7zip jq poppler fd ripgrep fzf zoxide resvg imagemagick bcachefs-tools btrfs-progs dosfstools exfatprogs f2fs-tools gpart jfsutils mtools nilfs-utils ntfs-3g polkit hyprpolkitagent udftools flatpak xfsprogs xorg-xhost fastfetch zsh"
+# ==============================================================================
+# STEP-BASED EXTENSIBLE FRAMEWORK
+# ==============================================================================
+
+# --- STEP DEFINITIONS ---
+# Define your custom steps as standard Bash functions here.
+
+PACKAGES="base-devel pacman-contrib eza hyprland nodejs npm starship adwaita-fonts ttc-iosevka ttf-nerd-fonts-symbols-mono btop uwsm libreoffice-fresh mission-center go git github-cli vim yazi firefox vlc gparted kitty filelight xdg-utils shared-mime-info perl-file-mimeinfo xdg-desktop-portal-hyprland xdg-desktop-portal-gtk jdk-openjdk imv pavucontrol adwaita-icon-theme breeze-icons greetd greetd-tuigreet qt6 qt6-svg qt6-virtualkeyboard qt6-multimedia-ffmpeg ffmpeg 7zip jq poppler fd ripgrep fzf zoxide resvg imagemagick bcachefs-tools btrfs-progs dosfstools exfatprogs f2fs-tools gpart jfsutils mtools nilfs-utils ntfs-3g polkit hyprpolkitagent udftools flatpak xfsprogs xorg-xhost fastfetch zsh"
 
 DOTFILES_DIR="$HOME/SensibleDots"
 YAY_URL="https://aur.archlinux.org/yay.git"
+LINK_TARGET="/run/media/$USER/"
+SYMLINK_PATH="$HOME/Drives/"
 
-# Function to get user confirmation
-prompt_for_user() {
-    local step_desc=$1
-    local choice
+step_one() {
+    echo "-> Running Step 1: Installing packages from the defined list..."
+    sudo pacman -Sy --noconfirm --needed ${PACKAGES}
+    sleep 1
+    echo "-> Step 1 completed successfully."
+}
+
+step_two() {
+    echo "-> Running Step 2: Installing yay..."
+    # Add your actual logic here
+    git clone "$YAY_URL"
+    cd yay
+    makepkg -si
+    cd ..
+    sleep 1
+    echo "-> Step 2 completed successfully."
+}
+
+step_three() {
+    echo "-> Running Step 3: Adding flathub repository..."
+    # Add your actual logic here
+    flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+    sleep 1
+    echo "-> Step 3 completed successfully."
+}
+
+step_four() {
+    echo "-> Running Step 4: Installing greetd config..."
+    sudo cp "$DOTFILES_DIR/config.toml" /etc/greetd/config.toml
+    sleep 1
+    echo "-> Step 4 completed successfully."
+}
+
+step_five() {
+    echo "-> Running Step 5: Enabling greetd service..."
+    sudo systemctl enable greetd.service
+    systemctl --user enable hyprpolkitagent.service
+    sleep 1
+    echo "-> Step 5 completed successfully."
+}
+
+step_six() {
+    echo "-> Running Step 6: Installing AUR Packages..."
+    yay -S noctalia-shell xdg-desktop-portal-termfilechooser-hunkyburrito-git zsh-antidote zsh-patina-bin
+    sleep 1
+    echo "-> Step 6 completed successfully."
+}
+
+step_seven() {
+    echo "-> Running Step 7: Copying dotfiles from $DOTFILES_DIR to home directory..."
+    cp -r "$DOTFILES_DIR/.config" "$HOME"
+    sudo cp "$DOTFILES_DIR/yazi.desktop" /usr/share/applications/
+    cp "$DOTFILES_DIR/.vimrc" "$HOME"
+    cp "$DOTFILES_DIR/.bashrc" "$HOME"
+    cp "$DOTFILES_DIR/.zshrc" "$HOME"
+    cp "$DOTFILES_DIR/.zsh_plugins.txt" "$HOME"
+    sleep 1
+    echo "-> Step 7 completed successfully."
+}
+
+step_eight() {
+    echo "-> Running Step 8: setting zsh as default..."
+    chsh -s $(which zsh)
+    sleep 1
+    echo "-> Step 8 completed successfully."
+}
+
+step_nine() {
+    echo "-> Running step 9: Installing yazi plugins..."
+    ya pkg add macydnah/office
+    ya pkg add yazi-rs/plugins:mount
+    ya pkg add imsi32/yatline
+    sleep 1
+    echo "-> Step 9 completed successfully."
+}
+
+step_ten() {
+    echo "-> Running step 10: Creating folders and symlinks..."
+    mkdir -p ~/Downloads ~/Documents ~/Drives ~/Pictures ~/Videos
+    mkdir -p ~/Pictures/Wallpapers
+    ln -s "$LINK_TARGET" "$SYMLINK_PATH"
+    sleep 1
+    echo "-> Step 10 completed successfully."
+}
+
+step_eleven() {
+    echo "-> Running step 11: Setting xdg-mime defaults..."
+    xdg-mime default yazi.desktop inode/directory
+    xdg-mime default vlc.desktop video/x-matroska
+    xdg-mime default imv.desktop image/jpeg
+    sleep 1
+    echo "-> Step 11 completed successfully"
+}
+
+# --- CORE ENGINE ---
+# This function manages the prompts, validation loop, skips, and exits.
+
+run_step() {
+    local step_name="$1"
+    local step_function="$2"
+
     while true; do
-        echo ""
-        echo "--------------------------------------------------"
-        echo "STEP: $step_desc"
-        echo "--------------------------------------------------"
-        read -r -p "Enter choice (y=yes/continue, n=no/skip): " choice
-        
-        choice=$(echo "$choice" | tr '[:upper:]' '[:lower:]')
-        
-        case "$choice" in
-            y)
-                echo "--> Continuing with step."
-                echo ""
-                return 0 # Return success/continue
+        # Prompt the user for input
+        read -r -p "Do you want to run '$step_name'? (y/n/q): " user_choice
+
+        case "$user_choice" in
+            [Yy])
+                echo -e "\n[EXECUTING] $step_name"
+                echo "--------------------------------------------------"
+                # Execute the passed function name
+                $step_function
+                echo "--------------------------------------------------"
+                echo -e "Done.\n"
+                break
                 ;;
-            n)
-                echo "--> Skipping step."
-                echo ""
-                return 1 # Return skip/exit signal
+            [Nn])
+                echo -e "[SKIPPED] $step_name.\n"
+                break
+                ;;
+            [Qq])
+                echo -e "\n[QUIT] Exiting script entirely. Goodbye!"
+                exit 0
                 ;;
             *)
-                echo "--> Invalid choice: '$choice'. Please enter 'y' or 'n'."
-                prompt_for_user "$step_desc" # Loop back
+                # Error handling / Type checking wrapper
+                echo -e "Invalid input: '$user_choice'. Please type 'y' to continue, 'n' to skip, or 'q' to quit.\n"
                 ;;
         esac
     done
 }
 
-echo "Starting dotfiles installation script..."
 
-# Define the sequence of steps
-STEPS=(
-    "1. Installing packages from the defined list"
-    "2. Installing yay"
-    "3. Adding flathub repository"
-    "4. Installing greetd config"
-    "5. Enabling greetd service"
-    "6. Installing AUR Packages (Noctalia)"
-    "7. Copying dotfiles from $DOTFILES_DIR to home directory"
-    "8. installing yazi plugins"
-    "9. Creating standard user folders and the drives symlink"
-    "10. Setting xdg-mime defaults based on installed packages"
-)
+# --- MAIN EXECUTIONFLOW ---
+# This is where you orchestrate and sequence your script pipeline.
 
-# Loop through all steps
-for step in "${STEPS[@]}"; do
-    echo ""
+main() {
     echo "=================================================="
-    echo "Processing Step: $step"
+    echo " Starting Installation of SensibleDots"
     echo "=================================================="
-    
-    if prompt_for_user "$step" == 0; then
-        choice=$?
-        
-        case "$choice" in
-            0) # 'y'
-                echo "--> Executing step: $step"
-                # Execute the command specific to this step
-                case "$step" in
-                    "1. Installing packages from the defined list")
-                        echo "Installing packages: ${PACKAGES}"
-                        sudo pacman -Sy --noconfirm --needed ${PACKAGES}
-                        ;;
-                    "2. Installing yay")
-                        echo "Cloning yay repository..."
-                        git clone "$YAY_URL"
-                        cd yay
-                        makepkg -si
-                        cd ..
-                        ;;
-                    "3. Adding flathub repository")
-                        echo "Adding flathub repository."
-                        flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
-                        ;;
-                    "4. Installing greetd config")
-                        echo "Copying greetd config..."
-                        sudo cp "$DOTFILES_DIR/config.toml" /etc/greetd/
-                        ;;
-                    "5. Enabling greetd service")
-                        echo "Enabling System Service."
-                        sudo systemctl enable greetd.service
-                        systemctl --user enable hyprpolkitagent.service
-                        ;;
-                    "6. Installing AUR Packages (Noctalia)")
-                        echo "Installing AUR Packages"
-                        echo "Installing packages via yay:"
-                        echo "yay -S noctalia-shell xdg-desktop-portal-termfilechooser-hunkyburrito-git zsh-antidote zsh-patina-bin"
-                        yay -S noctalia-shell xdg-desktop-portal-termfilechooser-hunkyburrito-git zsh-antidote zsh-patina-bin
-                        ;;
-                    "7. Copying dotfiles from $DOTFILES_DIR to home directory")
-                        echo "Copying ~/.config/"
-                        if [ -d "$DOTFILES_DIR/.config" ]; then
-                            cp -r "$DOTFILES_DIR/.config" "$HOME"
-                        else
-                            echo "Warning: ~/.config/ folder not found in $DOTFILES_DIR, skipping copy."
-                        fi
-                        
-                        echo "Copying yazi.desktop to /usr/share/applications/ (will prompt for sudo password if necessary)"
-                        sudo cp "$DOTFILES_DIR/yazi.desktop" /usr/share/applications/
-                        
-                        echo "Copying .vimrc"
-                        sudo cp "$DOTFILES_DIR/.vimrc" "$HOME"
-                        
-                        echo "Copying .bashrc"
-                        sudo cp "$DOTFILES_DIR/.bashrc" "$HOME"
-                        
-                        echo "copying .zshrc and plugins"
-                        sudo cp "$DOTFILES_DIR/.zshrc" "$HOME"
-                        sudo cp "$DOTFILES_DIR/.zsh_plugins.txt" "$HOME"
-                        
-                        echo "setting zsh as default"
-                        chsh -s $(which zsh)
-                        ;;
-                    "8. ")
-                        echo "Installing yazi plugins..."
-                        ya pkg add macydnah/office
-                        ya pkg add yazi-rs/plugins:mount 
-                        ya pkg add imsi32/yatline
-                        echo "yazi plugins installed"
-                        ;;
-                    *)
-                        echo "Unknown step in case statement for step: $step"
-                        ;;
+    echo -e "Controls: [Y]es/Continue  |  [N]o/Skip  |  [Q]uit Script\n"
 
-                    "9. Creating standard user folders and the drives symlink")
-                        echo "Creating standard user folders and the drives symlink..."
-                        mkdir -p ~/Downloads ~/Documents ~/Drives ~/Pictures ~/Videos
-                        mkdir -p ~/Pictures/Wallpapers
-                        
-                        LINK_TARGET="/run/media/$USER/"
-                        SYMLINK_PATH="$HOME/Drives/"
-                        
-                        echo "Creating symlink: $SYMLINK_PATH -> $LINK_TARGET"
-                        ln -s "$LINK_TARGET" "$SYMLINK_PATH"
-                        echo "Successfully created symlink: $SYMLINK_PATH"
-                        ;;
-                    "10. Setting xdg-mime defaults based on installed packages")
-                        echo "Setting xdg-mime defaults..."
-                        xdg-mime default yazi.desktop inode/directory
-                        xdg-mime default vlc.desktop video/x-matroska
-                        xdg-mime default imv.desktop image/jpeg
-                        echo "xdg-mime defaults set."
-                        ;;
-                    *)
-                        echo "Unknown step in case statement for step: $step"
-                        ;;
-                esac
-                ;;
-            1) # 'n'
-                echo "--> Skipping step: $step"
-                ;;
-            *)
-                echo "--> Invalid choice received for step: $step. Skipping."
-                ;;
-        esac
-    else
-        # This branch handles unexpected failure in prompt_for_user itself
-        echo "--> Step prompt failed unexpectedly for: $step. Stopping further steps."
-        break
-    fi
-done
-echo "--------------------------------------------------"
-echo "Dotfiles installation finished."
+    # Register your steps here: run_step "Friendly Name" function_name
+    run_step "Installing packages from defined list" step_one
+    run_step "Installing yay" step_two
+    run_step "Adding flathub repository" step_three
+    run_step "Installing greetd config" step_four
+    run_step "Enabling greetd service" step_five
+    run_step "Installing AUR Packages" step_six
+    run_step "Copying dotfiles from $DOTFILES_DIR to home directory" step_seven
+    run_step "setting zsh as default" step_eight
+    run_step "Installing yazi plugins" step_nine
+    run_step "Creating folders and symlinks" step_ten
+    run_step "Setting xdg-mime defaults" step_eleven
+
+    echo "=================================================="
+    echo " Installation of SensibleDots Completed"
+    echo "=================================================="
+}
+
+# Fire off the main pipeline
+main
