@@ -29,5 +29,5 @@ require("config.lazy") -- Links to your lazy setup
 require("fzf-lua").setup({})
 require('matugen').setup()
 
-vim.keymap.set("n", "<C-p>", "<cmd>lua require('fzf-lua').files()<CR>", { silent = true })
-vim.keymap.set('n', '<C-n>', ':Neotree toggle<CR>', { desc = 'Toggle Neo-tree' })
+vim.keymap.set("n", "<leader>p", "<cmd>lua require('fzf-lua').files()<CR>", { silent = true }, { desc = "FzfLua Files" }) 
+vim.keymap.set('n', '<leader>n', ':Neotree toggle<CR>', { desc = 'Toggle Neo-tree' })
