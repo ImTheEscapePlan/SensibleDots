@@ -18,9 +18,17 @@ function y() {
 	command rm -f -- "$tmp"
 }
 
-export EDITOR=vim
-export VISUAL=vim
-export SYSTEMD_EDITOR=vim
+# insert custom aliases here
+alias ls='eza --icons --color=always --group-directories-first'
+alias ll='eza -al --icons --git --group-directories-first'
+alias lt='eza --tree --level=2 --icons'
+alias vim='nvim'
+# end of aliases
+
+export EDITOR=nvim
+export VISUAL=nvim
+export SYSTEMD_EDITOR=nvim
+export TERMINAL="kitty"
 export TERMCMD="kitty"
 export XDG_CONFIG_HOME="$HOME/.config"
 ZVM_INIT_MODE=sourcing
@@ -33,9 +41,3 @@ eval "$(zoxide init zsh --cmd cd)"
 eval "$(starship init zsh)"
 eval "$(zsh-patina activate)"
 fastfetch
-
-# insert custom aliases here
-alias ls='eza --icons --color=always --group-directories-first'
-alias ll='eza -al --icons --git --group-directories-first'
-alias lt='eza --tree --level=2 --icons'
-# end of aliases
