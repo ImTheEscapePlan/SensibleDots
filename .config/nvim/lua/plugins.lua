@@ -134,7 +134,7 @@ return {
             window = {
                 mappings = {
                     ["."] = "toggle_hidden",
-                    [".."] = "navigate_up",
+                    ["<leader>."] = "navigate_up",
                 },
             },
         },
