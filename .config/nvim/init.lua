@@ -14,7 +14,7 @@ vim.opt.shiftwidth = 4
 vim.opt.tabstop = 4
 vim.opt.termguicolors = true
 vim.opt.scrolloff = 5
-vim.opt.clipboard = "unnamed"
+vim.opt.clipboard = "unnamedplus"
 
 vim.diagnostic.config({
     virtual_text = {
