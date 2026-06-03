@@ -32,6 +32,9 @@ return {
         ---@diagnostic disable: missing-fields
         opts = {},
         ---@diagnostic enable: missing-fields
+        config = function()
+            require("fzf-lua").setup({})
+        end
     },
 
     -- LSP & Mason (Package Manager)
@@ -58,7 +61,12 @@ return {
             "hrsh7th/cmp-cmdline",
         },
         config = function()
+            local cmp_autopairs = require('nvim-autopairs.completion.cmp')
             local cmp = require("cmp")
+            cmp.event:on(
+                'confirm_done',
+                cmp_autopairs.on_confirm_done()
+            )
 
             cmp.setup({
                 snippet = {
@@ -114,7 +122,7 @@ return {
                     { name = "cmdline" },
                 }),
                 matching = { disallow_symbol_nonprefix_matching = false },
-            })
+            }) 
         end,
     },
 

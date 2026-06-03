@@ -27,8 +27,6 @@ vim.diagnostic.config({
 
 -- 3. Run the Lazy Bootstrapper & Plugin Specs
 require("config.lazy") -- Links to your lazy setup
-require("fzf-lua").setup({})
-require('matugen').setup()
 
 vim.keymap.set('n', '<leader>p', '<cmd>lua require("fzf-lua").files()<CR>', { silent = true }, { desc = "FzfLua Files" }) 
 vim.keymap.set('n', '<leader>n', ':Neotree toggle<CR>', { desc = 'Toggle Neo-tree' })
