@@ -194,4 +194,12 @@ return {
             require('matugen').setup()
         end,
     },
+    {
+        "folke/zen-mode.nvim",
+        opts = {}
+    },
+    {
+        "folke/twilight.nvim",
+        opts = {}
+    },
 }
