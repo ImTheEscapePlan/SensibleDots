@@ -5,7 +5,7 @@ return {
         'nvim-lualine/lualine.nvim',
         dependencies = { 'nvim-tree/nvim-web-devicons' },
         opts = {},
-        config = function ()
+        config = function()
             require("lualine").setup {
                 sections = {
                     lualine_c = {
@@ -31,22 +31,6 @@ return {
         end
     },
 
-    -- Git Integration
-    { "sindrets/diffview.nvim" },
-    {
-        "NeogitOrg/neogit",
-        lazy = true,
-        dependencies = {
-            "sindrets/diffview.nvim",
-            "ibhagwan/fzf-lua",
-        },
-        cmd = "Neogit",
-        keys = {
-            { "<leader>gg", "<cmd>Neogit<cr>", desc = "Show Neogit UI" }
-        },
-        opts = {}
-    },
-
     -- Fuzzy Finder
     {
         "ibhagwan/fzf-lua",
@@ -62,7 +46,7 @@ return {
     },
 
     -- LSP & Mason (Package Manager)
-    { "mason-org/mason.nvim", opts = {} },
+    { "mason-org/mason.nvim",        opts = {} },
     { "neovim/nvim-lspconfig" },
     {
         "mason-org/mason-lspconfig.nvim",
@@ -95,7 +79,7 @@ return {
             cmp.setup({
                 snippet = {
                     expand = function(args)
-                        vim.snippet.expand(args.body) 
+                        vim.snippet.expand(args.body)
                     end,
                 },
                 window = {},
@@ -146,7 +130,7 @@ return {
                     { name = "cmdline" },
                 }),
                 matching = { disallow_symbol_nonprefix_matching = false },
-            }) 
+            })
         end,
     },
 
@@ -193,7 +177,7 @@ return {
                 },
             })
         end,
-    }, 
+    },
 
     -- Text Editing Enhancements
     {
@@ -205,7 +189,7 @@ return {
         "kylechui/nvim-surround",
         version = "^4.0.0",
         event = "VeryLazy",
-        opts = {} 
+        opts = {}
     },
 
     -- Treesitter Syntax Highlighting
@@ -218,7 +202,7 @@ return {
             local configs = require('nvim-treesitter')
             -- If you want to force install specific parsers on startup:
             configs.install({ "lua", "vim", "vimdoc", "query", "markdown", "markdown_inline", "python" })
-        end 
+        end
     },
     {
         'RRethy/base16-nvim',
