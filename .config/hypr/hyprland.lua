@@ -31,7 +31,7 @@ hl.monitor({
 -- Set programs that you use
 local terminal    = "kitty"
 local fileManager = "kitty -e yazi"
-local textEditor  = "kitty -e vim"
+local textEditor  = "kitty -e nvim"
 
 
 -------------------
@@ -42,6 +42,8 @@ local textEditor  = "kitty -e vim"
 hl.on("hyprland.start", function ()
     hl.exec_cmd("qs -c noctalia-shell")
     hl.exec_cmd("udiskie --tray")
+    hl.exec_cmd("wl-paste --type text --watch cliphist store")
+    hl.exec_cmd("wl-paste --type image --watch cliphist store")
 end)
 
 -- Autostart necessary processes (like notifications daemons, status bars, etc.)
