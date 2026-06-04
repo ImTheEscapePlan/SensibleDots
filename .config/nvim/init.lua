@@ -38,6 +38,7 @@ vim.keymap.set('n', '<leader>f', '<cmd>lua vim.lsp.buf.format({ async = true })<
     { desc = 'LSP: Format Buffer' })
 vim.keymap.set('x', '<leader>f', '<cmd>lua vim.lsp.buf.format({ async = true })<CR>',
     { desc = 'LSP: Format Selected Range' })
+vim.keymap.set('n', '<leader>d', vim.diagnostic.open_float, { desc = "Show line diagnostics" })
 
 local term_group = vim.api.nvim_create_augroup("TerminalInsert", { clear = true })
 vim.api.nvim_create_autocmd({ "TermOpen", "BufEnter" }, {
