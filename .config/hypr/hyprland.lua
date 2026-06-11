@@ -68,6 +68,9 @@ hl.env("HYPRCURSOR_THEME", "breeze")
 hl.env("QT_QPA_PLATFORMTHEME", "gtk3")
 hl.env("QT_AUTO_SCREEN_SCALE", "1")
 hl.env("QT_WAYLAND_DISABLE_WINDOWDECORATION", "1")
+hl.env("GTK_USE_PORTAL", "1")
+hl.env("GDK_DEBUG", "portals")
+
 -----------------------
 ----- PERMISSIONS -----
 -----------------------
