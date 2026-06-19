@@ -149,9 +149,11 @@ return {
 
     -- Text Editing Enhancements
     {
-        'windwp/nvim-autopairs',
-        event = "InsertEnter",
-        config = true
+        "nvim-mini/mini.pairs",
+        version = false,
+        config = function()
+            require('mini.pairs').setup()
+        end
     },
     {
         "kylechui/nvim-surround",
@@ -169,7 +171,7 @@ return {
             -- Native configuration and parser installation
             local configs = require('nvim-treesitter')
             -- If you want to force install specific parsers on startup:
-            configs.install({ "lua", "vim", "vimdoc", "query", "markdown", "markdown_inline", "python" })
+            configs.install({ "lua", "vim", "vimdoc", "query", "markdown", "markdown_inline", "python", "cpp" })
         end
     },
     {
@@ -185,5 +187,20 @@ return {
     {
         "folke/twilight.nvim",
         opts = {}
+    },
+    {
+        "nvim-mini/mini.animate",
+        version = false,
+        config = function()
+            require('mini.animate').setup({
+                cursor = {
+                    enable = false,
+                },
+            })
+        end
+    },
+    {
+        "sphamba/smear-cursor.nvim",
+        opts = {},
     },
 }
