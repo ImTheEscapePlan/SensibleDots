@@ -1,5 +1,5 @@
 return {
-    -- UI & Icons
+    -- UI & Icons sai
     { "nvim-tree/nvim-web-devicons", opts = {} },
     {
         'nvim-lualine/lualine.nvim',
@@ -156,10 +156,11 @@ return {
         end
     },
     {
-        "kylechui/nvim-surround",
-        version = "^4.0.0",
-        event = "VeryLazy",
-        opts = {}
+        'nvim-mini/mini.surround',
+        version = false,
+        config = function()
+            require('mini.surround').setup()
+        end
     },
 
     -- Treesitter Syntax Highlighting
@@ -187,17 +188,6 @@ return {
     {
         "folke/twilight.nvim",
         opts = {}
-    },
-    {
-        "nvim-mini/mini.animate",
-        version = false,
-        config = function()
-            require('mini.animate').setup({
-                cursor = {
-                    enable = false,
-                },
-            })
-        end
     },
     {
         "sphamba/smear-cursor.nvim",
