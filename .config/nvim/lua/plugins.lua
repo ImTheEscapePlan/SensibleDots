@@ -1,9 +1,15 @@
 return {
     -- UI & Icons sai
-    { "nvim-tree/nvim-web-devicons", opts = {} },
+    {
+        "nvim-mini/mini.icons",
+        version = false,
+        config = function()
+            require('mini.icons').setup()
+            require('mini.icons').mock_nvim_web_devicons()
+        end
+    },
     {
         'nvim-lualine/lualine.nvim',
-        dependencies = { 'nvim-tree/nvim-web-devicons' },
         opts = {},
         config = function()
             require("lualine").setup {
@@ -34,7 +40,6 @@ return {
     -- Fuzzy Finder
     {
         "ibhagwan/fzf-lua",
-        dependencies = { "nvim-tree/nvim-web-devicons" },
         ---@module "fzf-lua"
         ---@type fzf-lua.Config|{}
         ---@diagnostic disable: missing-fields
@@ -109,7 +114,6 @@ return {
         dependencies = {
             "nvim-lua/plenary.nvim",
             "MunifTanjim/nui.nvim",
-            "nvim-tree/nvim-web-devicons",
         },
         keys = {
             { "<leader>e", "<cmd>Neotree toggle<cr>", desc = "Toggle Neo-tree" }
@@ -192,5 +196,31 @@ return {
     {
         "sphamba/smear-cursor.nvim",
         opts = {},
+    },
+    {
+        "rachartier/tiny-glimmer.nvim",
+        event = "VeryLazy",
+        config = function()
+            require("tiny-glimmer").setup({
+                overwrite = {
+                    undo = { enabled = true },
+                    redo = { enabled = true },
+                },
+            })
+        end
+    },
+    {
+        "folke/which-key.nvim",
+        event = "VeryLazy",
+        opts = {},
+        keys = {
+            {
+                "<leader>?",
+                function()
+                    require("which-key").setup()
+                end,
+                desc = "Buffer Local Keymaps (which-key)",
+            },
+        },
     },
 }
