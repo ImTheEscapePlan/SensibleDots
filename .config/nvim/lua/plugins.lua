@@ -201,6 +201,12 @@ return {
         opts = {},
     },
     {
+        "saghen/blink.indent"
+        --- @module 'blink.indent'
+        --- @type blink.indent.Config
+        -- opts = {},
+    },
+    {
         "rachartier/tiny-glimmer.nvim",
         event = "VeryLazy",
         config = function()
