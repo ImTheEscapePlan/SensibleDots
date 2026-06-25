@@ -10,7 +10,7 @@ scrolloff = 5
 
 [opener]
 edit = [
-    { run = '"$EDITOR" "$@"', desc = "Editor", block = true, for = "linux" }
+    { run = 'nvim "$@"', desc = "Editor", block = true, for = "linux" }
 ]
 play = [
     { run = 'vlc "$@"', block = false, desc = "VLC", for = "unix" }

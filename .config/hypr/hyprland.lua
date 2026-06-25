@@ -30,7 +30,7 @@ hl.monitor({
 
 -- Set programs that you use
 local terminal    = "kitty"
-local fileManager = "kitty -e zsh -lic yazi"
+local fileManager = "kitty -e yazi"
 local textEditor  = "kitty -e nvim"
 
 
