@@ -191,7 +191,10 @@ return {
     },
     {
         "folke/twilight.nvim",
-        opts = {}
+        opts = {
+            treesitter = false,
+            context = 10,
+        },
     },
     {
         "sphamba/smear-cursor.nvim",
