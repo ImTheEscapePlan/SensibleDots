@@ -29,7 +29,6 @@ vim.diagnostic.config({
 require("config.lazy") -- Links to your lazy setup
 
 vim.keymap.set('n', '<leader>p', '<cmd>lua require("fzf-lua").files()<CR>', { silent = true }, { desc = "FzfLua Files" })
-vim.keymap.set('n', '<leader>n', '<cmd>Neotree toggle<CR>', { desc = 'Toggle Neo-tree' })
 vim.keymap.set('n', '<leader>l', '<cmd>Lazy<CR>', { desc = 'Open Lazy.nvim' })
 vim.keymap.set('n', '<leader>m', '<cmd>Mason<CR>', { desc = 'Open Mason.nvim' })
 vim.keymap.set('n', '<leader>t', '<cmd>botright 15split | terminal<CR>', { desc = 'Open Terminal' })
@@ -39,6 +38,7 @@ vim.keymap.set('n', '<leader>f', '<cmd>lua vim.lsp.buf.format({ async = true })<
 vim.keymap.set('x', '<leader>f', '<cmd>lua vim.lsp.buf.format({ async = true })<CR>',
     { desc = 'LSP: Format Selected Range' })
 vim.keymap.set('n', '<leader>d', vim.diagnostic.open_float, { desc = "Show line diagnostics" })
+vim.keymap.set('n', '<leader>z', '<cmd>FzfLua builtin<CR>', { desc = "Open Builtin Fzf Commands" })
 
 local term_group = vim.api.nvim_create_augroup("TerminalInsert", { clear = true })
 vim.api.nvim_create_autocmd({ "TermOpen", "BufEnter" }, {
