@@ -1,0 +1,6 @@
+(
+    address: "127.0.0.1:6600",
+    cache_dir: Some("/home/ctrlescape/.cache/rmpc"),
+    volume_step: 5,
+    // Add custom keybinds or themes here
+)

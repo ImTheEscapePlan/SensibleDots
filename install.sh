@@ -64,13 +64,15 @@ step_six() {
 }
 
 step_seven() {
-    echo "-> Running Step 7: Copying dotfiles from $DOTFILES_DIR to home directory..."
+    echo "-> Running Step 7: Copying dotfiles from $DOTFILES_DIR to home directory and enabling music service..."
     cp -r "$DOTFILES_DIR/.config" "$HOME"
     sudo cp "$DOTFILES_DIR/yazi.desktop" /usr/share/applications/
     cp "$DOTFILES_DIR/.vimrc" "$HOME"
     cp "$DOTFILES_DIR/.bashrc" "$HOME"
     cp "$DOTFILES_DIR/.zshrc" "$HOME"
     cp "$DOTFILES_DIR/.zsh_plugins.txt" "$HOME"
+    systemctl --user enable --now mpd
+    mpc update
     sleep 1
     echo "-> Step 7 completed successfully."
 }
