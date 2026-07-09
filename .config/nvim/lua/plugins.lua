@@ -201,10 +201,14 @@ return {
         opts = {},
     },
     {
-        "saghen/blink.indent"
-        --- @module 'blink.indent'
-        --- @type blink.indent.Config
-        -- opts = {},
+        "lukas-reineke/indent-blankline.nvim",
+        main ="ibl",
+        ---@module "ibl"
+        ---@type ibl.config
+        opts = {},
+        config = function()
+            require("ibl").setup()
+        end
     },
     {
         "rachartier/tiny-glimmer.nvim",
