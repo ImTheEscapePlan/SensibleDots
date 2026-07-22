@@ -16,10 +16,10 @@
 
 -- See https://wiki.hypr.land/Configuring/Basics/Monitors/
 hl.monitor({
-    output   = "",
-    mode     = "preferred",
-    position = "auto",
-    scale    = "auto",
+    output   = "eDP-1",
+    mode     = "1920x1080@60",
+    position = "0x0",
+    scale    = 1,
 })
 
 
@@ -42,6 +42,7 @@ local textEditor  = "kitty -e nvim"
 hl.on("hyprland.start", function ()
     hl.exec_cmd("qs -c noctalia-shell")
     hl.exec_cmd("udiskie --tray")
+    hl.exec_cmd("easyeffects --gapplication-service")
     hl.exec_cmd("wl-paste --type text --watch cliphist store")
     hl.exec_cmd("wl-paste --type image --watch cliphist store")
 end)
@@ -68,9 +69,9 @@ hl.env("HYPRCURSOR_THEME", "breeze")
 hl.env("QT_QPA_PLATFORMTHEME", "gtk3")
 hl.env("QT_AUTO_SCREEN_SCALE", "1")
 hl.env("QT_WAYLAND_DISABLE_WINDOWDECORATION", "1")
+hl.env("GTK_ICON_THEME", "Adwaita")
 hl.env("GTK_USE_PORTAL", "1")
 hl.env("GDK_DEBUG", "portals")
-
 -----------------------
 ----- PERMISSIONS -----
 -----------------------
@@ -145,7 +146,7 @@ hl.curve("almostLinear",   { type = "bezier", points = { {0.5, 0.5},   {0.75, 1}
 hl.curve("quick",          { type = "bezier", points = { {0.15, 0},    {0.1, 1}     } })
 
 -- Default springs
-hl.curve("easy",           { type = "spring", mass = 1, stiffness = 71.2633, dampening = 15.8273644 })
+hl.curve("easy",           { type = "spring", mass = 1, stiffness = 170, dampening = 19 })
 
 hl.animation({ leaf = "global",        enabled = true,  speed = 10,   bezier = "default" })
 hl.animation({ leaf = "border",        enabled = true,  speed = 5.39, bezier = "easeOutQuint" })
