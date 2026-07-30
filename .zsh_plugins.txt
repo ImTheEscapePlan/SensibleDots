@@ -1,10 +1,5 @@
-#oh-my-zsh plugins
-getantidote/use-omz
-ohmyzsh/ohmyzsh path:plugins/git
-
 # User plugins
 Aloxaf/fzf-tab
 jeffreytse/zsh-vi-mode
 zsh-users/zsh-autosuggestions
 zsh-users/zsh-history-substring-search
-MichaelAquilina/zsh-you-should-use
