@@ -7,7 +7,7 @@
 # --- STEP DEFINITIONS ---
 # Define your custom steps as standard Bash functions here.
 
-PACKAGES="base-devel pacman-contrib eza hyprland nodejs npm starship adwaita-fonts ttc-iosevka ttf-nerd-fonts-symbols-mono btop uwsm libreoffice-fresh mission-center go git github-cli vim neovim luarocks tree-sitter-cli yazi firefox vlc gparted kitty filelight xdg-utils shared-mime-info perl-file-mimeinfo xdg-desktop-portal-hyprland xdg-desktop-portal-gtk jdk-openjdk imv pavucontrol adwaita-icon-theme breeze-icons greetd greetd-tuigreet qt6 qt6-svg qt6-virtualkeyboard qt6-multimedia-ffmpeg ffmpeg 7zip jq poppler fd ripgrep fzf zoxide resvg imagemagick bcachefs-tools btrfs-progs dosfstools exfatprogs f2fs-tools gpart jfsutils mtools nilfs-utils ntfs-3g polkit hyprpolkitagent udftools flatpak xfsprogs xorg-xhost fastfetch zsh rustup mpd rmpc mpc"
+PACKAGES="base-devel pacman-contrib eza hyprland nodejs npm starship adwaita-fonts ttc-iosevka ttf-nerd-fonts-symbols-mono btop uwsm libreoffice-fresh mission-center go git github-cli vim neovim luarocks tree-sitter-cli yazi firefox vlc gparted kitty filelight xdg-utils shared-mime-info perl-file-mimeinfo xdg-desktop-portal-hyprland xdg-desktop-portal-gtk jdk-openjdk imv pavucontrol adwaita-icon-theme breeze-icons greetd greetd-tuigreet qt6 qt6-svg qt6-virtualkeyboard qt6-multimedia-ffmpeg ffmpeg 7zip jq poppler fd ripgrep fzf zoxide resvg imagemagick bcachefs-tools btrfs-progs dosfstools exfatprogs f2fs-tools gpart jfsutils mtools nilfs-utils ntfs-3g polkit hyprpolkitagent udftools flatpak xfsprogs xorg-xhost fastfetch zsh rustup mpd rmpc mpc noctalia"
 
 DOTFILES_DIR="$HOME/SensibleDots"
 YAY_URL="https://aur.archlinux.org/yay.git"
@@ -58,7 +58,7 @@ step_five() {
 
 step_six() {
     echo "-> Running Step 6: Installing AUR Packages..."
-    yay -S noctalia xdg-desktop-portal-termfilechooser-hunkyburrito-git zsh-antidote zsh-patina-bin ripdrag
+    yay -S xdg-desktop-portal-termfilechooser-hunkyburrito-git zsh-antidote zsh-patina-bin ripdrag
     sleep 1
     echo "-> Step 6 completed successfully."
 }
