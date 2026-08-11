@@ -58,7 +58,7 @@ step_five() {
 
 step_six() {
     echo "-> Running Step 6: Installing AUR Packages..."
-    yay -S noctalia-shell xdg-desktop-portal-termfilechooser-hunkyburrito-git zsh-antidote zsh-patina-bin ripdrag
+    yay -S noctalia xdg-desktop-portal-termfilechooser-hunkyburrito-git zsh-antidote zsh-patina-bin ripdrag
     sleep 1
     echo "-> Step 6 completed successfully."
 }
@@ -66,6 +66,7 @@ step_six() {
 step_seven() {
     echo "-> Running Step 7: Copying dotfiles from $DOTFILES_DIR to home directory and enabling music service..."
     cp -r "$DOTFILES_DIR/.config" "$HOME"
+    cp -r "$DOTFILES_DIR/.local" "$HOME"
     sudo cp "$DOTFILES_DIR/yazi.desktop" /usr/share/applications/
     cp "$DOTFILES_DIR/.vimrc" "$HOME"
     cp "$DOTFILES_DIR/.bashrc" "$HOME"

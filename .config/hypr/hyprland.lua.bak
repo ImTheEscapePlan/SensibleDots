@@ -16,13 +16,28 @@
 
 -- See https://wiki.hypr.land/Configuring/Basics/Monitors/
 hl.monitor({
-    output   = "",
-    mode     = "preferred",
-    position = "auto",
-    scale    = "auto",
+    output   = "DP-4",
+    mode     = "1920x1080@180",
+    position = "0x0",
+    scale    = 1,
+})
+hl.monitor({
+    output   = "HDMI-A-4",
+    mode     = "1280x960@60",
+    position = "-1280x0",
+    scale    = 1,
 })
 
-
+hl.workspace_rule({ workspace = "1", monitor = "DP-4", default = true })
+hl.workspace_rule({ workspace = "2", monitor = "DP-4" })
+hl.workspace_rule({ workspace = "3", monitor = "DP-4" })
+hl.workspace_rule({ workspace = "4", monitor = "DP-4" })
+hl.workspace_rule({ workspace = "5", monitor = "DP-4" })
+hl.workspace_rule({ workspace = "6", monitor = "HDMI-A-4", default = true })
+hl.workspace_rule({ workspace = "7", monitor = "HDMI-A-4" })
+hl.workspace_rule({ workspace = "8", monitor = "HDMI-A-4" })
+hl.workspace_rule({ workspace = "9", monitor = "HDMI-A-4" })
+hl.workspace_rule({ workspace = "10", monitor = "HDMI-A-4" })
 
 ---------------------
 ---- MY PROGRAMS ----
@@ -40,7 +55,8 @@ local textEditor  = "kitty -e nvim"
 
 -- See https://wiki.hypr.land/Configuring/Basics/Autostart/
 hl.on("hyprland.start", function ()
-    hl.exec_cmd("noctalia")
+    hl.exec_cmd("qs -c noctalia-shell")
+    hl.exec_cmd("xrandr --output DP-4 --primary")
     hl.exec_cmd("udiskie --tray")
     hl.exec_cmd("wl-paste --type text --watch cliphist store")
     hl.exec_cmd("wl-paste --type image --watch cliphist store")
@@ -62,6 +78,10 @@ end)
 
 -- See https://wiki.hypr.land/Configuring/Advanced-and-Cool/Environment-variables/
 
+hl.env("LIBVA_DRIVER_NAME", "nvidia")
+hl.env("__GLX_VENDOR_LIBRARY_NAME", "nvidia")
+hl.env("NVD_BACKEND", "direct")
+hl.env("ELECTRON_OZONE_PLATFORM_HINT", "auto")
 hl.env("XCURSOR_SIZE", "24")
 hl.env("HYPRCURSOR_SIZE", "24")
 hl.env("HYPRCURSOR_THEME", "breeze")
@@ -257,7 +277,7 @@ hl.device({
 ---------------------
 
 local mainMod = "SUPER" -- Sets "Windows" key as main modifier
-local ipc = "noctalia msg "
+local ipc = "qs -c noctalia-shell ipc call "
 
 -- Example binds, see https://wiki.hypr.land/Configuring/Basics/Binds/ for more
 hl.bind(mainMod .. " + tab", hl.dsp.exec_cmd(terminal))
@@ -267,8 +287,8 @@ hl.bind(mainMod .. " + E", hl.dsp.exec_cmd(fileManager))
 hl.bind(mainMod .. " + R", hl.dsp.layout("togglesplit"))    -- dwindle only
 hl.bind(mainMod .. " + P", hl.dsp.window.pseudo())
 hl.bind(mainMod .. " + V", hl.dsp.exec_cmd(textEditor))
-hl.bind(mainMod .. " + comma", hl.dsp.exec_cmd(ipc .. "settings-toggle"))
-hl.bind(mainMod .. " + " .. mainMod .. "_L", hl.dsp.exec_cmd(ipc .. "panel-toggle launcher"), { release = true, non_consuming = true })
+hl.bind(mainMod .. " + comma", hl.dsp.exec_cmd(ipc .. "settings toggle"))
+hl.bind(mainMod .. " + " .. mainMod .. "_L", hl.dsp.exec_cmd(ipc .. "launcher toggle"), { release = true, non_consuming = true })
 
 -- Move focus with mainMod + arrow keys
 hl.bind(mainMod .. " + left",  hl.dsp.focus({ direction = "left" }))
@@ -319,16 +339,16 @@ hl.bind(mainMod .. " + mouse:272", hl.dsp.window.drag(),   { mouse = true })
 hl.bind(mainMod .. " + mouse:273", hl.dsp.window.resize(), { mouse = true })
 
 -- Laptop multimedia keys for volume and LCD brightness
-hl.bind("XF86AudioRaiseVolume", hl.dsp.exec_cmd(ipc .. "volume-up"), { locked = true, repeating = true })
-hl.bind("XF86AudioLowerVolume", hl.dsp.exec_cmd(ipc .. "volume-down"),      { locked = true, repeating = true })
-hl.bind("XF86AudioMute",        hl.dsp.exec_cmd(ipc .. "volume-mute"),     { locked = true, repeating = true })
+hl.bind("XF86AudioRaiseVolume", hl.dsp.exec_cmd(ipc .. "volume increase"), { locked = true, repeating = true })
+hl.bind("XF86AudioLowerVolume", hl.dsp.exec_cmd(ipc .. "volume decrease"),      { locked = true, repeating = true })
+hl.bind("XF86AudioMute",        hl.dsp.exec_cmd(ipc .. "volume muteOutput"),     { locked = true, repeating = true })
 hl.bind("XF86AudioMicMute",     hl.dsp.exec_cmd("wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle"),   { locked = true, repeating = true })
-hl.bind("XF86MonBrightnessUp",  hl.dsp.exec_cmd(ipc .. "brightness-up"),                  { locked = true, repeating = true })
-hl.bind("XF86MonBrightnessDown",hl.dsp.exec_cmd(ipc .. "brightness-down"),                  { locked = true, repeating = true })
+hl.bind("XF86MonBrightnessUp",  hl.dsp.exec_cmd(ipc .. "brightness increase"),                  { locked = true, repeating = true })
+hl.bind("XF86MonBrightnessDown",hl.dsp.exec_cmd(ipc .. "brightness decrease"),                  { locked = true, repeating = true })
 
 -- Requires playerctl
 hl.bind("XF86AudioNext",  hl.dsp.exec_cmd(ipc .. "media next"),       { locked = true })
-hl.bind("XF86AudioPause", hl.dsp.exec_cmd(ipc .. "media pause"), { locked = true })
+hl.bind("XF86AudioPause", hl.dsp.exec_cmd(ipc .. "media playPause"), { locked = true })
 hl.bind("XF86AudioPlay",  hl.dsp.exec_cmd(ipc .. "media play"), { locked = true })
 hl.bind("XF86AudioPrev",  hl.dsp.exec_cmd(ipc .. "media previous"),   { locked = true })
 
@@ -350,13 +370,6 @@ local suppressMaximizeRule = hl.window_rule({
     suppress_event = "maximize",
 })
 -- suppressMaximizeRule:set_enabled(false)
-
-hl.window_rule({
-    match = { class = "dev.noctalia.Noctalia" },
-    float = true,
-    size = { 1080, 920 },
-})
-
 
 hl.window_rule({
     -- Fix some dragging issues with XWayland
@@ -392,14 +405,8 @@ hl.window_rule({
 
 hl.layer_rule({
     name = "noctalia",
-    match = {
-        namespace = "^noctalia-(bar-.+|notification|dock|panel|attached-panel|osd|window-switcher)$",
-    },
-    no_anim = true,
+    match = { namespace = "noctalia-background-.*$" },
     ignore_alpha = 0.5,
     blur = true,
     blur_popups = true,
 })
-
--- For Noctalia Color templates
-require("noctalia").apply_theme()
