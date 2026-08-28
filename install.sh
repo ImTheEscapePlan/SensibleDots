@@ -86,7 +86,6 @@ step_eight() {
 
 step_nine() {
     echo "-> Running step 9: Installing yazi plugins..."
-    ya pkg add macydnah/office
     ya pkg add yazi-rs/plugins:mount
     ya pkg add imsi32/yatline
     sleep 1
