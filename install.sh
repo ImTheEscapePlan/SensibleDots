@@ -57,7 +57,7 @@ step_five() {
 
 step_six() {
     echo "-> Running Step 6: Installing AUR Packages..."
-    yay -S xdg-desktop-portal-termfilechooser-hunkyburrito-git zsh-antidote zsh-patina-bin ripdrag
+    yay -S xdg-desktop-portal-termfilechooser-hunkyburrito-git zsh-antidote zsh-patina-bin
     sleep 1
     echo "-> Step 6 completed successfully."
 }
